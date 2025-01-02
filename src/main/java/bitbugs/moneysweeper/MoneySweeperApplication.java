@@ -12,6 +12,8 @@ public class MoneySweeperApplication extends Application {
     public void start(Stage stage) throws IOException {
         stage.setMinWidth(800);
         stage.setMinHeight(500);
+        stage.setWidth(1100);
+        stage.setHeight(700);
         FXMLLoader fxmlLoader = new FXMLLoader(MoneySweeperApplication.class.getResource("menu.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
         stage.setTitle("Money Swe3§€$eper");
