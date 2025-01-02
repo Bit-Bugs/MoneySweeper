@@ -1,0 +1,23 @@
+.left-side {
+    -fx-background-image:url('holy-franklin.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain; /* Ensures the image covers the entire VBox */
+    -fx-background-position: bottom left;
+}
+
+.difficulty-button:selected {
+    -fx-border-color: #A6A6A6;
+    -fx-border-width: 1.5;
+}
+
+.difficulty-button:hover {
+    -fx-text-fill: #505050;
+}
+
+.play-button {
+    -fx-background-color: black;
+}
+
+.play-button:hover {
+    -fx-background-color: #1c1c1c;
+}

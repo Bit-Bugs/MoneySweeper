@@ -26,7 +26,7 @@ tasks.withType(JavaCompile) {
 
 application {
     mainModule = 'bitbugs.moneysweeper'
-    mainClass = 'bitbugs.moneysweeper.HelloApplication'
+    mainClass = 'bitbugs.moneysweeper.MoneySweeperApplication'
 }
 
 javafx {
