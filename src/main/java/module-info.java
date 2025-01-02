@@ -5,4 +5,6 @@ module bitbugs.moneysweeper {
 
     opens bitbugs.moneysweeper to javafx.fxml;
     exports bitbugs.moneysweeper;
+    exports bitbugs.moneysweeper.gui;
+    opens bitbugs.moneysweeper.gui to javafx.fxml;
 }

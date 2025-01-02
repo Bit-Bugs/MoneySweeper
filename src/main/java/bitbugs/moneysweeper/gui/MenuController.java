@@ -1,4 +1,4 @@
-package bitbugs.moneysweeper;
+package bitbugs.moneysweeper.gui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
