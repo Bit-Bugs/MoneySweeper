@@ -1,24 +1,15 @@
 package bitbugs.moneysweeper;
 
+import bitbugs.moneysweeper.gui.SceneManager;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 
 public class MoneySweeperApplication extends Application {
     @Override
-    public void start(Stage stage) throws IOException {
-        stage.setMinWidth(800);
-        stage.setMinHeight(500);
-        stage.setWidth(1100);
-        stage.setHeight(700);
-        FXMLLoader fxmlLoader = new FXMLLoader(MoneySweeperApplication.class.getResource("menu.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Money Swe3§€$eper");
-        stage.setScene(scene);
-        stage.show();
+    public void start(Stage stage) {
+        var sceneManager = SceneManager.getInstance();
+        sceneManager.setPrimaryStage(stage, "Money Swe3§€$eper");
+        sceneManager.setScene("menu.fxml");
     }
 
     public static void main(String[] args) {

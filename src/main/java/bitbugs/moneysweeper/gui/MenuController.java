@@ -1,5 +1,6 @@
 package bitbugs.moneysweeper.gui;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -39,5 +40,10 @@ public class MenuController {
 
             //Update Scoreboard here
         });
+    }
+
+    @FXML
+    public void handlePlayButtonClick(ActionEvent event) {
+        SceneManager.getInstance().setScene("in-game.fxml");
     }
 }

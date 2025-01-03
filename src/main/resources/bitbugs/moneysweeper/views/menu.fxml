@@ -134,7 +134,7 @@
                                           <Insets />
                                        </VBox.margin>
                                     </VBox>
-                                    <Button fx:id="playButton" alignment="CENTER" contentDisplay="CENTER" maxHeight="30.0" maxWidth="100.0" minHeight="30.0" minWidth="100.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" style="-fx-border-radius: 20; -fx-background-radius: 20; -fx-border-width: 0; -fx-background-insets: 0;" styleClass="play-button">
+                                    <Button fx:id="playButton" alignment="CENTER" contentDisplay="CENTER" maxHeight="30.0" maxWidth="100.0" minHeight="30.0" minWidth="100.0" mnemonicParsing="false" onAction="#handlePlayButtonClick" prefHeight="30.0" prefWidth="100.0" style="-fx-border-radius: 20; -fx-background-radius: 20; -fx-border-width: 0; -fx-background-insets: 0;" styleClass="play-button">
                                        <graphic>
                                           <SVGPath content="M30,25 Q30,20 35,22 L75,47 Q80,50 75,53 L35,78 Q30,80 30,75 Z" fill="WHITE" scaleX="0.3" scaleY="0.3" />
                                        </graphic>
