@@ -1,0 +1,14 @@
+.dollar {
+    -fx-background-image:url('dollar.png');
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+    -fx-background-position: center center;
+}
+
+.continue-button {
+    -fx-background-color: black;
+}
+
+.continue-button:hover {
+    -fx-background-color: #1c1c1c;
+}

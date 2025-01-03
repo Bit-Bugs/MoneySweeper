@@ -1,0 +1,7 @@
+.back-to-menu-button {
+    -fx-background-color: black;
+}
+
+.back-to-menu-button:hover {
+    -fx-background-color: #1c1c1c;
+}
