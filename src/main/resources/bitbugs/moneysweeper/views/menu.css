@@ -21,3 +21,7 @@
 .play-button:hover {
     -fx-background-color: #1c1c1c;
 }
+
+.play-button:disabled {
+    -fx-background-color: #676767;
+}

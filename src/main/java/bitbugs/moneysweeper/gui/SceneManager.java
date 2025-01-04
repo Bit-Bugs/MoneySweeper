@@ -1,16 +1,14 @@
 package bitbugs.moneysweeper.gui;
 
-import javafx.animation.FadeTransition;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.io.IOException;
 
 public class SceneManager {
     private static SceneManager instance;
+    private static SceneData<?> sceneData;
     private Stage primaryStage;
 
     // Private constructor for Singleton pattern
@@ -34,14 +32,23 @@ public class SceneManager {
         this.primaryStage = stage;
     }
 
-    public void setScene(String fxmlFile) {
+    public void setScene(String fxmlFile){
+        this.setScene(fxmlFile, null);
+    }
+
+    public void setScene(String fxmlFile, SceneData<?> data) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/bitbugs/moneysweeper/views/" + fxmlFile));
-            Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+            sceneData = data;
+            var fxmlLoader = new FXMLLoader(getClass().getResource("/bitbugs/moneysweeper/views/" + fxmlFile));
+            var scene = new Scene(fxmlLoader.load(), 320, 240);
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public SceneData<?> getSceneData() {
+        return sceneData;
     }
 }
