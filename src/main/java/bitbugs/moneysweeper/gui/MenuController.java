@@ -80,7 +80,6 @@ public class MenuController {
                 fieldHeight.setDisable(true);
             }
 
-            //Update Scoreboard here
             scoreboardItems.clear();
             if (difficulty.getSelectedToggle() == difficultyEasy) {
                 fieldWidth.setText("8");
@@ -90,12 +89,18 @@ public class MenuController {
             } else if (difficulty.getSelectedToggle() == difficultyMid) {
                 fieldWidth.setText("16");
                 fieldHeight.setText("16");
+
+                loadScoreboard(Difficulty.MID);
             } else if (difficulty.getSelectedToggle() == difficultyHard) {
                 fieldWidth.setText("30");
                 fieldHeight.setText("16");
+
+                loadScoreboard(Difficulty.HARD);
             } else {
                 fieldWidth.setText("8");
                 fieldHeight.setText("8");
+
+                loadScoreboard(Difficulty.CUSTOM);
             }
 
         });
