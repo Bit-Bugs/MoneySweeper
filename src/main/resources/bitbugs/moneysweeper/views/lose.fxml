@@ -63,7 +63,7 @@
                               <Font name="Helvetica Bold" size="18.0" />
                            </font>
                         </Text>
-                        <Button accessibleRole="TEXT" minHeight="40.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" style="-fx-background-insets: 0; -fx-background-color: white; -fx-background-radius: 20; -fx-border-radius: 20;" text="6" />
+                        <Button fx:id="time" accessibleRole="TEXT" minHeight="40.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" style="-fx-background-insets: 0; -fx-background-color: white; -fx-background-radius: 20; -fx-border-radius: 20;" text="6" />
                      </children>
                   </VBox>
                   <Button accessibleRole="TEXT" minHeight="40.0" mnemonicParsing="false" onAction="#handleBackToMenuButtonClick" prefHeight="40.0" prefWidth="200.0" style="-fx-background-insets: 0; -fx-background-radius: 20; -fx-border-radius: 20; -fx-text-fill: white;" styleClass="continue-button" text="Continue &gt;">

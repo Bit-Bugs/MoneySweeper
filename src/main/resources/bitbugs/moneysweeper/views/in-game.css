@@ -16,6 +16,6 @@
 }
 
 .gameboard {
-    -fx-vgap: 10;
-    -fx-hgap: 10;
+    -fx-padding: 8;
+    -fx-background-color: #A6A6A6;
 }
