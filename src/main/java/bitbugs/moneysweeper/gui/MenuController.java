@@ -65,12 +65,12 @@ public class MenuController {
         });
 
         fieldWidth.textProperty().addListener((observable, oldValue, newValue) -> {
-            playButton.setDisable((newValue).isEmpty());
+            playButton.setDisable((newValue).isEmpty() || Integer.parseInt(newValue) < 1);
 
         });
 
         fieldHeight.textProperty().addListener((observable, oldValue, newValue) -> {
-            playButton.setDisable((newValue).isEmpty());
+            playButton.setDisable((newValue).isEmpty() || Integer.parseInt(newValue) < 1);
         });
 
         difficulty.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
@@ -78,6 +78,7 @@ public class MenuController {
                 bombs.setText("");
                 fieldWidth.setDisable(true);
                 fieldHeight.setDisable(true);
+                playButton.setDisable(false);
             }
 
             scoreboardItems.clear();
