@@ -12,12 +12,12 @@ public class Playground {
 
         if (difficulty == "easy")
         {
-            this.difficultySize = 10;
+            this.difficultySize = 8;
         }
 
         if (difficulty == "mid")
         {
-            this.difficultySize = 15;
+            this.difficultySize = 16;
         }
 
         if (difficulty == "hard")
@@ -33,8 +33,8 @@ public class Playground {
                 this.fields[x][y] = new Field();
             }
         }
-        PlaceMines();
-        //CalculateSurroundingMines <--->
+        placeMines();
+        calculateSurroundingMines();
     }
 
 
@@ -60,7 +60,20 @@ public class Playground {
     }
 
 
-    private boolean FieldHasMine(int x, int y){
+
+    public void tagField(int x, int y) {
+        Field field = fields[x][y];
+        if ((!field.getIsTagged()))
+        {
+            field.setIsTagged(true);
+        }
+        if ((field.getIsTagged()))
+        {
+            field.setIsTagged(false);
+        }
+    }
+
+    public boolean FieldHasMine(int x, int y){
         if(x>-1 && x<difficultySize && y>-1 && y<difficultySize)
         {
             return fields[x][y].getHasBomb();
@@ -68,7 +81,33 @@ public class Playground {
         return false;
     }
 
-    private void PlaceMines(){
+    private void calculateSurroundingMines(){
+         int[][] positions ={
+                {1,0},{1,1},{0,1},
+                {-1,1},{-1,0},{-1,-1},
+                {0,-1},{1,-1}
+         };
+        for (int x = 0; x < difficultySize; x++)
+        {
+            for (int y = 0; y < difficultySize; y++)
+            {
+                Field field = fields[x][y];
+                for (int[] pos: positions)
+                {
+                    int xNeighbor = x+pos[0];
+                    int yNeighbor = y+pos[1];
+
+                    if (FieldHasMine(xNeighbor, yNeighbor))
+                    {
+                        field.setSurroundingMines(field.getSurroundingMines()+1);
+                    }
+                }
+            }
+        }
+    }
+
+
+    private void placeMines(){
         Random rnd = new Random();
         int x = 0;
         int y = 0;
