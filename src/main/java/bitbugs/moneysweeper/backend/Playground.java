@@ -121,4 +121,27 @@ public class Playground {
             }
         }
     }
+
+    // Covers/Uncovers one Tile
+    private void CoverUncoverTile(int xPos, int yPos, boolean state){
+        fields[xPos][yPos].setTurnedOver(state);
+    }
+
+    //Uncovers all Tiles in the Field Array
+    private void UncoverAllTiles(){
+        for (int row = 0; row < fields.length; row++) {
+            for (int column = 0; column < fields[row].length; column++) {
+                CoverUncoverTile(column, row, true);
+            }
+        }
+    }
+
+    //Covers all Tiles in the Field Array
+    private void CoverAllTiles(){
+        for (int row = 0; row < fields.length; row++) {
+            for (int column = 0; column < fields[row].length; column++) {
+                CoverUncoverTile(column, row, false);
+            }
+        }
+    }
 }
