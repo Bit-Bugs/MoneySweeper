@@ -135,13 +135,4 @@ public class Playground {
             }
         }
     }
-
-    //Covers all Tiles in the Field Array
-    private void CoverAllTiles(){
-        for (int row = 0; row < fields.length; row++) {
-            for (int column = 0; column < fields[row].length; column++) {
-                CoverUncoverTile(column, row, false);
-            }
-        }
-    }
 }
