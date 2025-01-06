@@ -123,15 +123,16 @@ public class Playground {
     }
 
     // Covers/Uncovers one Tile
-    private void CoverUncoverTile(int xPos, int yPos, boolean state){
-        fields[xPos][yPos].setTurnedOver(state);
+    private int UncoverTile(int xPos, int yPos){
+        fields[xPos][yPos].setTurnedOver(true);
+        return fields[xPos][yPos].getSurroundingMines();
     }
 
     //Uncovers all Tiles in the Field Array
     private void UncoverAllTiles(){
         for (int row = 0; row < fields.length; row++) {
             for (int column = 0; column < fields[row].length; column++) {
-                CoverUncoverTile(column, row, true);
+                UncoverTile(column, row);
             }
         }
     }
