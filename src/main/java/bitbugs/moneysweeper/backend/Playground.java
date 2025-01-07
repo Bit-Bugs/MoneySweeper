@@ -17,7 +17,7 @@ public class Playground {
     // Constructor initializes the playground based on the selected difficulty
     public Playground(Difficulty difficulty, int[] difficultySize) {
         this.difficulty = difficulty;
-        this
+
         // Set the playground size based on the difficulty level
         if (difficulty.equals(Difficulty.EASY)) {
             this.difficultySize[0] = 8;
