@@ -5,44 +5,55 @@ import bitbugs.moneysweeper.gui.Difficulty;
 import java.util.*;
 
 public class Playground {
+    // Represents the playing field as a 2D array of Field objects
     private Field[][] fields;
-    private Difficulty difficulty;
-    private int difficultySize;
 
-    public Playground(Difficulty difficulty) {
+    // Stores the difficulty level of the game
+    private Difficulty difficulty;
+
+    // Array representing the size of the playground based on difficulty
+    private int[] difficultySize;
+
+    // Constructor initializes the playground based on the selected difficulty
+    public Playground(Difficulty difficulty, int[] difficultySize) {
         this.difficulty = difficulty;
 
-        if (difficulty.equals(Difficulty.EASY))
-        {
-            this.difficultySize = 8;
+        // Set the playground size based on the difficulty level
+        if (difficulty.equals(Difficulty.EASY)) {
+            this.difficultySize[0] = 8;
+            this.difficultySize[1] = 8;
         }
 
-        if (difficulty.equals(Difficulty.MID))
-        {
-            this.difficultySize = 16;
+        if (difficulty.equals(Difficulty.MID)) {
+            this.difficultySize[0] = 16;
+            this.difficultySize[1] = 16;
         }
 
-        if (difficulty.equals(Difficulty.HARD))
-        {
-            this.difficultySize = 25;
+        if (difficulty.equals(Difficulty.HARD)) {
+            this.difficultySize[0] = 30;
+            this.difficultySize[1] = 16;
         }
 
-        this.fields = new Field[difficultySize] [difficultySize];
-        for (int x = 0; x < difficultySize; x++)
-        {
-            for (int y = 0; y < difficultySize; y++)
-            {
+        // Initialize the fields array with empty Field objects
+        setFields(new Field[difficultySize[0]][difficultySize[1]]);
+        for (int x = 0; x < difficultySize[0]; x++) {
+            for (int y = 0; y < difficultySize[1]; y++) {
                 this.fields[x][y] = new Field();
             }
         }
+
+        // Place mines on the field
         placeMines();
+
+        // Calculate the number of surrounding mines for each field
         calculateSurroundingMines();
     }
 
-
+    // Getters and setters for the fields, difficulty, and difficultySize
     public Field[][] getFields() {
         return fields;
     }
+
     public void setFields(Field[][] fields) {
         this.fields = fields;
     }
@@ -50,179 +61,162 @@ public class Playground {
     public Difficulty getDifficulty() {
         return difficulty;
     }
+
     public void setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
     }
 
-    public int getDifficultySize() {
+    public int[] getDifficultySize() {
         return difficultySize;
     }
-    public void setDifficultySize(int difficultySize) {
+
+    public void setDifficultySize(int[] difficultySize) {
         this.difficultySize = difficultySize;
     }
 
-
-
+    // Toggles the "tagged" state of a field (used for marking suspected mines)
     public void tagField(int x, int y) {
-        Field field = fields[x][y];
-        if ((!field.getIsTagged()))
-        {
-            field.setIsTagged(true);
-        }
-        if ((field.getIsTagged()))
-        {
-            field.setIsTagged(false);
+        if (x > -1 && x < getDifficultySize()[0] && y > -1 && y < getDifficultySize()[1]) {
+            if (!fields[x][y].getIsTagged()) {
+                fields[x][y].setIsTagged(true);
+            } else {
+                fields[x][y].setIsTagged(false);
+            }
         }
     }
 
-    public boolean fieldHasMine(int x, int y){
-        if(x>-1 && x<difficultySize && y>-1 && y<difficultySize)
-        {
+    // Checks if a specific field contains a mine
+    public boolean fieldHasMine(int x, int y) {
+        if (x > -1 && x < getDifficultySize()[0] && y > -1 && y < getDifficultySize()[1]) {
             return fields[x][y].getHasBomb();
         }
         return false;
     }
 
-    private void calculateSurroundingMines(){
-         int[][] positions ={
-                {1,0},{1,1},{0,1},
-                {-1,1},{-1,0},{-1,-1},
-                {0,-1},{1,-1}
-         };
-        for (int x = 0; x < difficultySize; x++)
-        {
-            for (int y = 0; y < difficultySize; y++)
-            {
-                Field field = fields[x][y];
-                for (int[] pos: positions)
-                {
-                    int xNeighbor = x+pos[0];
-                    int yNeighbor = y+pos[1];
+    // Calculates the number of surrounding mines for each field
+    private void calculateSurroundingMines() {
+        // Relative positions of the eight neighboring fields
+        int[][] positions = {
+                {1, 0}, {1, 1}, {0, 1},
+                {-1, 1}, {-1, 0}, {-1, -1},
+                {0, -1}, {1, -1}
+        };
 
-                    if (fieldHasMine(xNeighbor, yNeighbor))
-                    {
-                        field.setSurroundingMines(field.getSurroundingMines()+1);
+        // Iterate over each field in the playground
+        for (int x = 0; x < getDifficultySize()[0]; x++) {
+            for (int y = 0; y < getDifficultySize()[1]; y++) {
+                // Check all neighboring positions
+                for (int[] pos : positions) {
+                    int xNeighbor = x + pos[0];
+                    int yNeighbor = y + pos[1];
+
+                    // If a neighboring field has a mine, increment the count
+                    if (fieldHasMine(xNeighbor, yNeighbor)) {
+                        fields[x][y].setSurroundingMines(fields[x][y].getSurroundingMines() + 1);
                     }
                 }
             }
         }
     }
 
-
-    private void placeMines(){
+    // Randomly places mines on the field
+    private void placeMines() {
         Random rnd = new Random();
-        int x = 0;
-        int y = 0;
+        int x, y;
 
-        for (int i = 0; i < difficultySize ; i++)
-        {
-            x = rnd.nextInt(difficultySize);
-            y = rnd.nextInt(difficultySize);
-            if(!(fieldHasMine(x, y))){
+        for (int i = 0; i < difficultySize[0]; i++) {
+            x = rnd.nextInt(difficultySize[0]);
+            y = rnd.nextInt(difficultySize[1]);
+
+            // Only place a mine if the field does not already have one
+            if (!fieldHasMine(x, y)) {
                 fields[x][y].setHasBomb(true);
             }
         }
     }
 
-private class Position{
-       public int x;
-       public int y;
-       public boolean isChecked;
-       public int surroundingMines;
-       public Position(int x, int y, boolean isChecked, int surroundingMines) {
-           this.x = x;
-           this.y = y;
-           this.isChecked = isChecked;
-           this.surroundingMines = surroundingMines;
-       }
-}
+    // Helper class representing a position on the field
+    private class Position {
+        public int x;
+        public int y;
+        public boolean isChecked;
+        public int surroundingMines;
 
+        public Position(int x, int y, boolean isChecked, int surroundingMines) {
+            this.x = x;
+            this.y = y;
+            this.isChecked = isChecked;
+            this.surroundingMines = surroundingMines;
+        }
+    }
 
+    // Calculates all fields to uncover based on the given position
     public ArrayList<Field> calculateUncoverFields(int xPos, int yPos) {
         ArrayList<Field> result = new ArrayList<>();
 
-        if (xPos < 0 || yPos >= difficultySize) {
-            return result; //-> exit empty array out of range
+        // Return an empty result if the position is out of bounds or already uncovered
+        if (xPos < 0 || xPos >= getDifficultySize()[0] || yPos >= getDifficultySize()[1] || yPos < 0) {
+            return result;
         }
-        if (fields[xPos][yPos].getTurnedOver())
-        {
-            //noch alle aufklappen die eh klar sind
-            return result;  //-> exit empty array (field is still turned)
+        if (fields[xPos][yPos].getTurnedOver()) {
+            return result;
         }
 
+        // If the field contains a mine, uncover only this field
         if (fields[xPos][yPos].getHasBomb()) {
-            result.add(fields[xPos][yPos]); //-> exit with bomb as list item
+            result.add(fields[xPos][yPos]);
             return result;
         }
 
-        if (fields[xPos][yPos].getSurroundingMines() > 0){
-            result.add(fields[xPos][yPos]); //-> exit with this field
+        // If the field has surrounding mines, uncover only this field
+        if (fields[xPos][yPos].getSurroundingMines() > 0) {
+            result.add(fields[xPos][yPos]);
             return result;
         }
 
-        //nur mehr der Fall dass man ein Field geklickt hat dass keine nummer hat und keine bombe ist
-        ArrayList<Position> calcList = new ArrayList<Position>();
-
-        //berechnet alle Felder die aufgedeckt werden
+        // If the field is empty, recursively uncover all connected empty fields
+        ArrayList<Position> calcList = new ArrayList<>();
         addSurroundingFields(xPos, yPos, calcList);
 
-        //result list aufbauen
         for (Position position : calcList) {
             result.add(fields[position.x][position.y]);
         }
 
         return result;
-
     }
 
+    // Adds all valid surrounding fields to the calculation list
+    private void addSurroundingFields(int xPos, int yPos, ArrayList<Position> calcList) {
+        addOnlyNewFieldsToList(xPos, yPos, true, calcList); // Center
 
-    private void addSurroundingFields(int xPos, int yPos,  ArrayList<Position> calcList){
-
-        addOnlyNewFieldsToList(xPos, yPos, true,calcList);  //mitte mitte
-
-        addOnlyNewFieldsToList(xPos-1,yPos-1, false, calcList); //links oben
-        addOnlyNewFieldsToList(xPos-1, yPos, false, calcList); //links mitte
-        addOnlyNewFieldsToList(xPos-1, yPos+1, false, calcList); //links unten
-        addOnlyNewFieldsToList(xPos, yPos-1, false, calcList); //mitte oben
-        addOnlyNewFieldsToList(xPos, yPos+1, false, calcList); //mitte unten
-        addOnlyNewFieldsToList(xPos+1, yPos-1,false, calcList); //rechts oben
-        addOnlyNewFieldsToList(xPos+1,yPos,false, calcList); //rechts mitte
-        addOnlyNewFieldsToList(xPos+1,yPos+1,false, calcList); //rechts unten
+        addOnlyNewFieldsToList(xPos - 1, yPos - 1, false, calcList); // Top-left
+        addOnlyNewFieldsToList(xPos - 1, yPos, false, calcList); // Top
+        addOnlyNewFieldsToList(xPos - 1, yPos + 1, false, calcList); // Top-right
+        addOnlyNewFieldsToList(xPos, yPos - 1, false, calcList); // Left
+        addOnlyNewFieldsToList(xPos, yPos + 1, false, calcList); // Right
+        addOnlyNewFieldsToList(xPos + 1, yPos - 1, false, calcList); // Bottom-left
+        addOnlyNewFieldsToList(xPos + 1, yPos, false, calcList); // Bottom
+        addOnlyNewFieldsToList(xPos + 1, yPos + 1, false, calcList); // Bottom-right
     }
 
+    // Adds a new field to the calculation list if it is not already present
     private void addOnlyNewFieldsToList(int x, int y, boolean checked, ArrayList<Position> calcList) {
-        if ( !isInRange(x,y) ) {
+        if (!isInRange(x, y)) {
             return;
         }
         for (Position position : calcList) {
-            if (position.x == x && position.y == y){
-                return; //pos existiert schon in list
+            if (position.x == x && position.y == y) {
+                return; // Skip if the position already exists in the list
             }
         }
         calcList.add(new Position(x, y, checked, fields[x][y].getSurroundingMines()));
     }
 
+    // Checks if the given position is within the field's bounds
     private boolean isInRange(int x, int y) {
-        if (x<0 || y<0 ) {
+        if (x < 0 || y < 0) {
             return false;
         }
-        if (x >= getDifficultySize() || y >= getDifficultySize() ) {
-            return false;
-        }
-        return true;
+        return x < getDifficultySize()[0] && y < getDifficultySize()[1];
     }
-
-
-
-
-
-
-
-//    public void UncoverAllTiles(){
-//        for (int row = 0; row < fields.length; row++) {
-//            for (int column = 0; column < fields[row].length; column++) {
-//                uncoverTile(column, row);
-//            }
-//        }
-//    }
 }
