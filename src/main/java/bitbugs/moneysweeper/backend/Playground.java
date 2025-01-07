@@ -1,26 +1,28 @@
 package bitbugs.moneysweeper.backend;
 
+import bitbugs.moneysweeper.gui.Difficulty;
+
 import java.util.*;
 
 public class Playground {
     private Field[][] fields;
-    private String difficulty;
+    private Difficulty difficulty;
     private int difficultySize;
 
-    public Playground(String difficulty) {
+    public Playground(Difficulty difficulty) {
         this.difficulty = difficulty;
 
-        if (difficulty == "easy")
+        if (difficulty.equals(Difficulty.EASY))
         {
             this.difficultySize = 8;
         }
 
-        if (difficulty == "mid")
+        if (difficulty.equals(Difficulty.MID))
         {
             this.difficultySize = 16;
         }
 
-        if (difficulty == "hard")
+        if (difficulty.equals(Difficulty.HARD))
         {
             this.difficultySize = 25;
         }
@@ -45,10 +47,10 @@ public class Playground {
         this.fields = fields;
     }
 
-    public String getDifficulty() {
+    public Difficulty getDifficulty() {
         return difficulty;
     }
-    public void setDifficulty(String difficulty) {
+    public void setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
     }
 
@@ -73,7 +75,7 @@ public class Playground {
         }
     }
 
-    public boolean FieldHasMine(int x, int y){
+    public boolean fieldHasMine(int x, int y){
         if(x>-1 && x<difficultySize && y>-1 && y<difficultySize)
         {
             return fields[x][y].getHasBomb();
@@ -97,7 +99,7 @@ public class Playground {
                     int xNeighbor = x+pos[0];
                     int yNeighbor = y+pos[1];
 
-                    if (FieldHasMine(xNeighbor, yNeighbor))
+                    if (fieldHasMine(xNeighbor, yNeighbor))
                     {
                         field.setSurroundingMines(field.getSurroundingMines()+1);
                     }
@@ -116,7 +118,7 @@ public class Playground {
         {
             x = rnd.nextInt(difficultySize);
             y = rnd.nextInt(difficultySize);
-            if(!(FieldHasMine(x, y))){
+            if(!(fieldHasMine(x, y))){
                 fields[x][y].setHasBomb(true);
             }
         }
