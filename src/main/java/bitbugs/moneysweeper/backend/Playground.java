@@ -207,7 +207,7 @@ public class Playground {
         if (x<0 || y<0 ) {
             return false;
         }
-        if (x >= getDifficultySize() || y >= getDifficultySize() ) {
+        if (x >= getDifficultySize()[0] || y >= getDifficultySize()[1] ) {
             return false;
         }
         return true;
