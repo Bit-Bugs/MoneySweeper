@@ -1,23 +1,18 @@
 package bitbugs.moneysweeper.gui;
 
 import bitbugs.moneysweeper.backend.Playground;
-import bitbugs.moneysweeper.gui.dto.LoseDto;
+import bitbugs.moneysweeper.gui.dto.FinishDto;
 import bitbugs.moneysweeper.gui.dto.MenuDto;
 import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.HPos;
-import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 import java.time.LocalTime;
-import java.util.Stack;
 
 public class InGameController {
 
@@ -37,6 +32,7 @@ public class InGameController {
     public void initialize() {
         var sceneData = (MenuDto) SceneManager.getInstance().getSceneData().data();
         highscore.setText(String.valueOf(sceneData.highscore()));
+
         GridPane gameboard = new GridPane();
         gameboard.getStyleClass().add("gameboard");
         gameboardContainer.getChildren().add(gameboard);
@@ -45,10 +41,11 @@ public class InGameController {
         gameboard.setHgap(4);
 
         int[] playgroundSize = new int[]{sceneData.fieldWidth(), sceneData.fieldHeight()};
+        Playground playground = sceneData.difficulty() == Difficulty.CUSTOM ? new Playground(sceneData.difficulty(), playgroundSize) : new Playground(sceneData.difficulty());
 
-
-        for (int x = 0; x < sceneData.fieldWidth(); x++) {
-            for (int y = 0; y < sceneData.fieldHeight(); y++) {
+        // generate gameboard
+        for (int x = 0; x < playground.getDifficultySize()[0]; x++) {
+            for (int y = 0; y < playground.getDifficultySize()[1]; y++) {
                 var fieldText = new Text("");
                 fieldText.setFont(new Font("Helvetica", 15));
                 fieldText.setWrappingWidth(20);
@@ -58,6 +55,13 @@ public class InGameController {
                 field.setId(x + y + "");
                 field.getStyleClass().add("field-button");
                 field.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
+                var finalX = x;
+                var finalY = y;
+                field.onMouseClickedProperty().addListener((observable, oldValue, newValue) -> {
+                    var values = playground.calculateUncoverFields(finalX, finalY);
+
+                });
 
                 field.setGraphic(fieldText);
                 field.setOnContextMenuRequested(event -> placeFlag(fieldText));
@@ -81,7 +85,6 @@ public class InGameController {
             rowConstraints.setVgrow(Priority.ALWAYS);
             gameboard.getRowConstraints().add(rowConstraints);
         }
-        Playground playground = new Playground(sceneData.difficulty(), playgroundSize);
 
         // init timer
         var startTime = System.nanoTime();
@@ -94,10 +97,15 @@ public class InGameController {
         };
         timer.start();
 
+        flags.setText(sceneData.bombs() + "");
         flags.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(Integer.parseInt(flags.getText()) == sceneData.fieldHeight() * sceneData.fieldWidth()) {
-                var loseDto = new LoseDto(time.getText());
-                SceneManager.getInstance().setScene("lose.fxml", new SceneData<>(loseDto));
+            if (Integer.parseInt(flags.getText()) == 0) {
+                var hasWon = playground.checkIfWon();
+
+                if (hasWon) {
+                    var finishDto = new FinishDto(time.getText());
+                    SceneManager.getInstance().setScene("win.fxml", new SceneData<>(finishDto));
+                }
             }
         });
     }
@@ -121,10 +129,10 @@ public class InGameController {
     private void placeFlag(Text fieldText) {
         if (fieldText.getText().isEmpty()) {
             fieldText.setText("🚨");
-            flags.setText(Integer.parseInt(flags.getText()) + 1 + "");
+            flags.setText(Integer.parseInt(flags.getText()) - 1 + "");
         } else {
             fieldText.setText("");
-            flags.setText(Integer.parseInt(flags.getText()) - 1 + "");
+            flags.setText(Integer.parseInt(flags.getText()) + 1 + "");
         }
     }
 }

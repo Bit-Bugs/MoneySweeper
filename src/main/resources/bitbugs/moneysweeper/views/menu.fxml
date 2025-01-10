@@ -114,7 +114,10 @@
                                     </HBox>
                                     <VBox alignment="TOP_CENTER" spacing="4.0">
                                        <children>
-                                          <Label text="Size" />
+                                          <Label alignment="CENTER" contentDisplay="CENTER" text="Size">
+                                             <VBox.margin>
+                                                <Insets right="-54.0" />
+                                             </VBox.margin></Label>
                                           <HBox alignment="TOP_RIGHT" prefHeight="34.0" prefWidth="162.0" spacing="10.0">
                                              <children>
                                                 <HBox alignment="CENTER" maxHeight="30.0" minHeight="30.0" minWidth="100.0" prefHeight="30.0" prefWidth="100.0" spacing="10.0" style="-fx-border-radius: 20; -fx-background-color: white; -fx-background-radius: 20;">

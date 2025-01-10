@@ -14,25 +14,13 @@ public class MenuController {
     private ToggleGroup difficulty;
 
     @FXML
-    private ToggleButton customDifficulty;
-
-    @FXML
-    private ToggleButton difficultyEasy;
-
-    @FXML
-    private ToggleButton difficultyMid;
-
-    @FXML
-    private ToggleButton difficultyHard;
+    private ToggleButton difficultyEasy, difficultyMid, difficultyHard, customDifficulty;
 
     @FXML
     private TextField bombs;
 
     @FXML
-    private TextField fieldWidth;
-
-    @FXML
-    private TextField fieldHeight;
+    private TextField fieldWidth, fieldHeight;
 
     @FXML
     private Button playButton;
@@ -47,6 +35,7 @@ public class MenuController {
         difficultyEasy.setUserData(10);
         difficultyMid.setUserData(40);
         difficultyHard.setUserData(99);
+//        difficultyEasy.setUserData(new GamemodeToggleDto(8,8,10));
 
         scoreboard.setItems(scoreboardItems);
         //set scoreboard for default selected gamemode (easy)
@@ -81,31 +70,32 @@ public class MenuController {
                 playButton.setDisable(false);
             }
 
+//            fieldWidth.textProperty().bind();
+
             scoreboardItems.clear();
+
             if (difficulty.getSelectedToggle() == difficultyEasy) {
                 fieldWidth.setText("8");
                 fieldHeight.setText("8");
-
                 loadScoreboard(Difficulty.EASY);
             } else if (difficulty.getSelectedToggle() == difficultyMid) {
                 fieldWidth.setText("16");
                 fieldHeight.setText("16");
-
                 loadScoreboard(Difficulty.MID);
             } else if (difficulty.getSelectedToggle() == difficultyHard) {
                 fieldWidth.setText("30");
                 fieldHeight.setText("16");
-
                 loadScoreboard(Difficulty.HARD);
             } else if (difficulty.getSelectedToggle() == customDifficulty) {
                 loadScoreboard(Difficulty.CUSTOM);
             }
 
+            fieldHeight.textProperty().set("9");
         });
 
-        bombs.setTextFormatter(getNumberRangeFilter(0, 668, bombs));
-        fieldWidth.setTextFormatter(getNumberRangeFilter(0, 30, fieldWidth));
-        fieldHeight.setTextFormatter(getNumberRangeFilter(0, 24, fieldHeight));
+        bombs.setTextFormatter(getNumberRangeFilter(1, 668, bombs));
+        fieldWidth.setTextFormatter(getNumberRangeFilter(2, 30, fieldWidth));
+        fieldHeight.setTextFormatter(getNumberRangeFilter(2, 24, fieldHeight));
     }
 
     @FXML
@@ -119,7 +109,7 @@ public class MenuController {
         }
         Difficulty selectedDifficulty = (Difficulty) Difficulty.valueOf(difficultyValue.toUpperCase());
 
-        var highscore = scoreboardItems.isEmpty() ? 0 : scoreboardItems.getFirst().score();
+        var highscore = scoreboardItems.isEmpty() ? "0" : scoreboardItems.getFirst().time();
         var menuDto = new MenuDto(getBombs(), Integer.parseInt(fieldWidth.getText()),
                 Integer.parseInt(fieldHeight.getText()), highscore, selectedDifficulty);
         SceneManager.getInstance().setScene("in-game.fxml", new SceneData<>(menuDto));
@@ -128,8 +118,8 @@ public class MenuController {
 
     private void loadScoreboard(Difficulty difficulty) {
         if (difficulty == Difficulty.EASY) {
-            scoreboardItems.add(new ScoreboardEntry("ByteMe 🤖", 1));
-            scoreboardItems.add(new ScoreboardEntry("MemoryLeakMaster5000", 2));
+            scoreboardItems.add(new ScoreboardEntry("ByteMe 🤖", "1"));
+            scoreboardItems.add(new ScoreboardEntry("MemoryLeakMaster5000", "2"));
         } else if (difficulty == Difficulty.MID) {
 
         } else if (difficulty == Difficulty.HARD) {

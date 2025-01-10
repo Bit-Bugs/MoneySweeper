@@ -1,8 +1,8 @@
 package bitbugs.moneysweeper.gui.dto;
 
-public record ScoreboardEntry(String username, int score) {
+public record ScoreboardEntry(String username, String time) {
     @Override
     public String toString() {
-        return score + "s - " + username;
+        return time + "s - " + username;
     }
 }

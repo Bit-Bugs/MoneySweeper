@@ -14,6 +14,9 @@ public class Playground {
     // Array representing the size of the playground based on difficulty
     private int[] difficultySize;
 
+    public Playground() {
+    }
+
     // Constructor initializes the playground based on the selected difficulty
     public Playground(Difficulty difficulty, int[] difficultySize) {
         this.difficulty = difficulty;
@@ -32,6 +35,19 @@ public class Playground {
 
         // Calculate the number of surrounding mines for each field
         calculateSurroundingMines();
+    }
+
+    public Playground(Difficulty difficulty) {
+        this(difficulty, getGameboardSize(difficulty));
+    }
+
+    private static int[] getGameboardSize(Difficulty difficulty) {
+        return switch (difficulty) {
+            case EASY -> new int[]{8, 8};
+            case MID -> new int[]{16, 16};
+            case HARD -> new int[]{30, 16};
+            default -> throw new IllegalStateException("Unexpected value: " + difficulty);
+        };
     }
 
     // Getters and setters for the fields, difficulty, and difficultySize
@@ -203,5 +219,9 @@ public class Playground {
             return false;
         }
         return x < getDifficultySize()[0] && y < getDifficultySize()[1];
+    }
+
+    public boolean checkIfWon() {
+        return true;
     }
 }
