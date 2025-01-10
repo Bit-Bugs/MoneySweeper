@@ -125,12 +125,10 @@ public class Playground {
 private class Position{
        public int x;
        public int y;
-       public boolean isChecked;
        public int surroundingMines;
-       public Position(int x, int y, boolean isChecked, int surroundingMines) {
+       public Position(int x, int y, int surroundingMines) {
            this.x = x;
            this.y = y;
-           this.isChecked = isChecked;
            this.surroundingMines = surroundingMines;
        }
 }
@@ -145,7 +143,7 @@ private class Position{
         if (fields[xPos][yPos].getTurnedOver())
         {
             //noch alle aufklappen die eh klar sind
-            return result;  //-> exit empty array (field is still turned)
+            return result;  //-> exit empty array (field is already turned)
         }
 
         if (fields[xPos][yPos].getHasBomb()) {
@@ -161,8 +159,11 @@ private class Position{
         //nur mehr der Fall dass man ein Field geklickt hat dass keine nummer hat und keine bombe ist
         ArrayList<Position> calcList = new ArrayList<Position>();
 
-        //berechnet alle Felder die aufgedeckt werden
+        calcList.add(new Position(xPos, yPos, 0));  //blank Feld
+
+        //berechnet alle Felder die aufgedeckt werden sollen
         addSurroundingFields(xPos, yPos, calcList);
+
 
         //result list aufbauen
         for (Position position : calcList) {
@@ -170,26 +171,21 @@ private class Position{
         }
 
         return result;
-
     }
-
 
     private void addSurroundingFields(int xPos, int yPos,  ArrayList<Position> calcList){
-
-        addOnlyNewFieldsToList(xPos, yPos, true,calcList);  //mitte mitte
-
-        addOnlyNewFieldsToList(xPos-1,yPos-1, false, calcList); //links oben
-        addOnlyNewFieldsToList(xPos-1, yPos, false, calcList); //links mitte
-        addOnlyNewFieldsToList(xPos-1, yPos+1, false, calcList); //links unten
-        addOnlyNewFieldsToList(xPos, yPos-1, false, calcList); //mitte oben
-        addOnlyNewFieldsToList(xPos, yPos+1, false, calcList); //mitte unten
-        addOnlyNewFieldsToList(xPos+1, yPos-1,false, calcList); //rechts oben
-        addOnlyNewFieldsToList(xPos+1,yPos,false, calcList); //rechts mitte
-        addOnlyNewFieldsToList(xPos+1,yPos+1,false, calcList); //rechts unten
+        addOnlyNewFieldsToList(xPos-1,yPos-1 ,calcList); //links oben
+        addOnlyNewFieldsToList(xPos-1, yPos, calcList); //links mitte
+        addOnlyNewFieldsToList(xPos-1, yPos+1, calcList); //links unten
+        addOnlyNewFieldsToList(xPos, yPos-1,  calcList); //mitte oben
+        addOnlyNewFieldsToList(xPos, yPos+1,  calcList); //mitte unten
+        addOnlyNewFieldsToList(xPos+1, yPos-1, calcList); //rechts oben
+        addOnlyNewFieldsToList(xPos+1,yPos, calcList); //rechts mitte
+        addOnlyNewFieldsToList(xPos+1,yPos+1, calcList); //rechts unten
     }
 
-    private void addOnlyNewFieldsToList(int x, int y, boolean checked, ArrayList<Position> calcList) {
-        if ( !isInRange(x,y) ) {
+    private void addOnlyNewFieldsToList(int x, int y,  ArrayList<Position> calcList) {
+        if (!isInRange(x,y)) {
             return;
         }
         for (Position position : calcList) {
@@ -197,7 +193,11 @@ private class Position{
                 return; //pos existiert schon in list
             }
         }
-        calcList.add(new Position(x, y, checked, fields[x][y].getSurroundingMines()));
+        calcList.add(new Position(x, y, fields[x][y].getSurroundingMines()));
+
+        if (fields[x][y].getSurroundingMines() == 0){
+            addSurroundingFields( x,y, calcList);
+        }
     }
 
     private boolean isInRange(int x, int y) {
@@ -209,18 +209,4 @@ private class Position{
         }
         return true;
     }
-
-
-
-
-
-
-
-//    public void UncoverAllTiles(){
-//        for (int row = 0; row < fields.length; row++) {
-//            for (int column = 0; column < fields[row].length; column++) {
-//                uncoverTile(column, row);
-//            }
-//        }
-//    }
 }

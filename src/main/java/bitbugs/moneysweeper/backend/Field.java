@@ -6,6 +6,7 @@ public class Field {
     private int surroundingMines;
     private boolean turnedOver;
 
+
     public Field()
     {
         this.hasBomb = false;
