@@ -78,11 +78,7 @@ public class Playground {
     // Toggles the "tagged" state of a field (used for marking suspected mines)
     public void tagField(int x, int y) {
         if (x > -1 && x < getDifficultySize()[0] && y > -1 && y < getDifficultySize()[1]) {
-            if (!fields[x][y].getIsTagged()) {
-                fields[x][y].setIsTagged(true);
-            } else {
-                fields[x][y].setIsTagged(false);
-            }
+            fields[x][y].setIsTagged(!fields[x][y].getIsTagged());
         }
     }
 
@@ -175,24 +171,24 @@ public class Playground {
     }
 
     // Adds all valid surrounding fields to the calculation list
-    private void addSurroundingFields(int xPos, int yPos,  ArrayList<Field> calcList){
+    private void addSurroundingFields(int xPos, int yPos, ArrayList<Field> calcList) {
         addOnlyNewFieldsToList(xPos, yPos, true, calcList);  //mitte mitte
-        addOnlyNewFieldsToList(xPos-1,yPos-1, false, calcList); //links oben
-        addOnlyNewFieldsToList(xPos-1, yPos, false, calcList); //links mitte
-        addOnlyNewFieldsToList(xPos-1, yPos+1, false, calcList); //links unten
-        addOnlyNewFieldsToList(xPos, yPos-1, false, calcList); //mitte oben
-        addOnlyNewFieldsToList(xPos, yPos+1, false, calcList); //mitte unten
-        addOnlyNewFieldsToList(xPos+1, yPos-1,false, calcList); //rechts oben
-        addOnlyNewFieldsToList(xPos+1,yPos,false, calcList); //rechts mitte
-        addOnlyNewFieldsToList(xPos+1,yPos+1,false, calcList); //rechts unten
+        addOnlyNewFieldsToList(xPos - 1, yPos - 1, false, calcList); //links oben
+        addOnlyNewFieldsToList(xPos - 1, yPos, false, calcList); //links mitte
+        addOnlyNewFieldsToList(xPos - 1, yPos + 1, false, calcList); //links unten
+        addOnlyNewFieldsToList(xPos, yPos - 1, false, calcList); //mitte oben
+        addOnlyNewFieldsToList(xPos, yPos + 1, false, calcList); //mitte unten
+        addOnlyNewFieldsToList(xPos + 1, yPos - 1, false, calcList); //rechts oben
+        addOnlyNewFieldsToList(xPos + 1, yPos, false, calcList); //rechts mitte
+        addOnlyNewFieldsToList(xPos + 1, yPos + 1, false, calcList); //rechts unten
     }
 
     private void addOnlyNewFieldsToList(int x, int y, boolean checked, ArrayList<Field> calcList) {
-        if ( !isInRange(x,y) ) {
+        if (!isInRange(x, y)) {
             return;
         }
         for (Field field : calcList) {
-            if (field.x == x && field.y == y){
+            if (field.x == x && field.y == y) {
                 return; // Skip if the position already exists in the list
             }
         }
@@ -201,16 +197,20 @@ public class Playground {
 
     // Checks if the given position is within the field's bounds
     private boolean isInRange(int x, int y) {
-        if (x<0 || y<0 ) {
+        if (x < 0 || y < 0) {
             return false;
         }
-        if (x >= getDifficultySize()[0] || y >= getDifficultySize()[1] ) {
+        if (x >= getDifficultySize()[0] || y >= getDifficultySize()[1]) {
             return false;
         }
         return true;
     }
 
     public boolean checkIfWon() {
-        return true;
+        return false;
+    }
+
+    public Field getField(int x, int y) {
+        return fields[x][y];
     }
 }

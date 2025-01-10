@@ -28,6 +28,8 @@ public class InGameController {
     @FXML
     private StackPane gameboardContainer;
 
+    private Playground playground;
+
     @FXML
     public void initialize() {
         var sceneData = (MenuDto) SceneManager.getInstance().getSceneData().data();
@@ -41,7 +43,7 @@ public class InGameController {
         gameboard.setHgap(4);
 
         int[] playgroundSize = new int[]{sceneData.fieldWidth(), sceneData.fieldHeight()};
-        Playground playground = sceneData.difficulty() == Difficulty.CUSTOM ? new Playground(sceneData.difficulty(), playgroundSize) : new Playground(sceneData.difficulty());
+        this.playground = sceneData.difficulty() == Difficulty.CUSTOM ? new Playground(sceneData.difficulty(), playgroundSize) : new Playground(sceneData.difficulty());
 
         // generate gameboard
         for (int x = 0; x < playground.getDifficultySize()[0]; x++) {
@@ -56,15 +58,15 @@ public class InGameController {
                 field.getStyleClass().add("field-button");
                 field.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
-                var finalX = x;
-                var finalY = y;
+                var xPos = x;
+                var yPos = y;
                 field.onMouseClickedProperty().addListener((observable, oldValue, newValue) -> {
-                    var values = playground.calculateUncoverFields(finalX, finalY);
+                    var values = playground.calculateUncoverFields(xPos, yPos);
 
                 });
 
                 field.setGraphic(fieldText);
-                field.setOnContextMenuRequested(event -> placeFlag(fieldText));
+                field.setOnContextMenuRequested(event -> placeFlag(fieldText, xPos, yPos));
 
                 GridPane.setHgrow(field, Priority.ALWAYS);
                 GridPane.setVgrow(field, Priority.ALWAYS);
@@ -117,7 +119,6 @@ public class InGameController {
 
     private String formatTime(long elapsedNanoSeconds) {
         LocalTime time = LocalTime.ofNanoOfDay(elapsedNanoSeconds);
-
         return String.format("%02d:%02d:%02d", time.getHour(), time.getMinute(), time.getSecond());
     }
 
@@ -126,13 +127,14 @@ public class InGameController {
      *
      * @param fieldText
      */
-    private void placeFlag(Text fieldText) {
-        if (fieldText.getText().isEmpty()) {
+    private void placeFlag(Text fieldText, int x, int y) {
+        if (!playground.getField(x, y).getIsTagged() && Integer.parseInt(flags.getText()) > 0) {
             fieldText.setText("🚨");
             flags.setText(Integer.parseInt(flags.getText()) - 1 + "");
-        } else {
+        } else if (playground.getField(x, y).getIsTagged()) {
             fieldText.setText("");
             flags.setText(Integer.parseInt(flags.getText()) + 1 + "");
         }
+        playground.tagField(x, y);
     }
 }
