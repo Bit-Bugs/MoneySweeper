@@ -60,9 +60,19 @@ public class InGameController {
 
                 var xPos = x;
                 var yPos = y;
-                field.onMouseClickedProperty().addListener((observable, oldValue, newValue) -> {
+                field.setOnMouseClicked(event -> {
+                    var lose = playground.fieldHasMine(xPos, yPos);
+                    if (lose) {
+                        var finishDto = new FinishDto(time.getText());
+                        SceneManager.getInstance().setScene("lose.fxml", new SceneData<>(finishDto));
+                    }
+
                     var values = playground.calculateUncoverFields(xPos, yPos);
 
+                    values.forEach(value -> {
+                        var gameField = (Button) gameboard.lookup(value.getX() + value.getY() + "");
+                        gameField.setText(value.getSurroundingMines() + "");
+                    });
                 });
 
                 field.setGraphic(fieldText);

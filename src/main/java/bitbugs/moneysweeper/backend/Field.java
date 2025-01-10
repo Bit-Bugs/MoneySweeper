@@ -56,4 +56,12 @@ public class Field {
     public void setTurnedOver(boolean turnedOver) {
         this.turnedOver = turnedOver;
     }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
 }
