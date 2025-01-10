@@ -212,18 +212,4 @@ public class Playground {
         }
         return true;
     }
-
-
-
-
-
-
-
-//    public void UncoverAllTiles(){
-//        for (int row = 0; row < fields.length; row++) {
-//            for (int column = 0; column < fields[row].length; column++) {
-//                uncoverTile(column, row);
-//            }
-//        }
-//    }
 }
