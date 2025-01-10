@@ -136,21 +136,6 @@ public class Playground {
         }
     }
 
-    // Helper class representing a position on the field
-    private class Position {
-        public int x;
-        public int y;
-        public boolean isChecked;
-        public int surroundingMines;
-
-        public Position(int x, int y, boolean isChecked, int surroundingMines) {
-            this.x = x;
-            this.y = y;
-            this.isChecked = isChecked;
-            this.surroundingMines = surroundingMines;
-        }
-    }
-
     // Calculates all fields to uncover based on the given position
     public ArrayList<Field> calculateUncoverFields(int xPos, int yPos) {
         ArrayList<Field> result = new ArrayList<>();
@@ -160,6 +145,7 @@ public class Playground {
             return result;
         }
         if (fields[xPos][yPos].getTurnedOver()) {
+            //noch alle aufklappen die eh klar sind
             return result;
         }
 
@@ -175,50 +161,53 @@ public class Playground {
             return result;
         }
 
-        // If the field is empty, recursively uncover all connected empty fields
-        ArrayList<Position> calcList = new ArrayList<>();
+        //nur mehr der Fall dass man ein Field geklickt hat dass keine nummer hat und keine bombe ist
+        ArrayList<Field> calcList = new ArrayList<Field>();
+
+        //berechnet alle Felder die aufgedeckt werden
         addSurroundingFields(xPos, yPos, calcList);
 
-        for (Position position : calcList) {
-            result.add(fields[position.x][position.y]);
+        //result list aufbauen
+        for (Field field : calcList) {
+            result.add(fields[field.x][field.y]);
         }
-
         return result;
     }
 
     // Adds all valid surrounding fields to the calculation list
-    private void addSurroundingFields(int xPos, int yPos, ArrayList<Position> calcList) {
-        addOnlyNewFieldsToList(xPos, yPos, true, calcList); // Center
-
-        addOnlyNewFieldsToList(xPos - 1, yPos - 1, false, calcList); // Top-left
-        addOnlyNewFieldsToList(xPos - 1, yPos, false, calcList); // Top
-        addOnlyNewFieldsToList(xPos - 1, yPos + 1, false, calcList); // Top-right
-        addOnlyNewFieldsToList(xPos, yPos - 1, false, calcList); // Left
-        addOnlyNewFieldsToList(xPos, yPos + 1, false, calcList); // Right
-        addOnlyNewFieldsToList(xPos + 1, yPos - 1, false, calcList); // Bottom-left
-        addOnlyNewFieldsToList(xPos + 1, yPos, false, calcList); // Bottom
-        addOnlyNewFieldsToList(xPos + 1, yPos + 1, false, calcList); // Bottom-right
+    private void addSurroundingFields(int xPos, int yPos,  ArrayList<Field> calcList){
+        addOnlyNewFieldsToList(xPos, yPos, true, calcList);  //mitte mitte
+        addOnlyNewFieldsToList(xPos-1,yPos-1, false, calcList); //links oben
+        addOnlyNewFieldsToList(xPos-1, yPos, false, calcList); //links mitte
+        addOnlyNewFieldsToList(xPos-1, yPos+1, false, calcList); //links unten
+        addOnlyNewFieldsToList(xPos, yPos-1, false, calcList); //mitte oben
+        addOnlyNewFieldsToList(xPos, yPos+1, false, calcList); //mitte unten
+        addOnlyNewFieldsToList(xPos+1, yPos-1,false, calcList); //rechts oben
+        addOnlyNewFieldsToList(xPos+1,yPos,false, calcList); //rechts mitte
+        addOnlyNewFieldsToList(xPos+1,yPos+1,false, calcList); //rechts unten
     }
 
-    // Adds a new field to the calculation list if it is not already present
-    private void addOnlyNewFieldsToList(int x, int y, boolean checked, ArrayList<Position> calcList) {
-        if (!isInRange(x, y)) {
+    private void addOnlyNewFieldsToList(int x, int y, boolean checked, ArrayList<Field> calcList) {
+        if ( !isInRange(x,y) ) {
             return;
         }
-        for (Position position : calcList) {
-            if (position.x == x && position.y == y) {
+        for (Field field : calcList) {
+            if (field.x == x && field.y == y){
                 return; // Skip if the position already exists in the list
             }
         }
-        calcList.add(new Position(x, y, checked, fields[x][y].getSurroundingMines()));
+        calcList.add(new Field(x, y, checked, fields[x][y].getSurroundingMines()));
     }
 
     // Checks if the given position is within the field's bounds
     private boolean isInRange(int x, int y) {
-        if (x < 0 || y < 0) {
+        if (x<0 || y<0 ) {
             return false;
         }
-        return x < getDifficultySize()[0] && y < getDifficultySize()[1];
+        if (x >= getDifficultySize()[0] || y >= getDifficultySize()[1] ) {
+            return false;
+        }
+        return true;
     }
 
     public boolean checkIfWon() {

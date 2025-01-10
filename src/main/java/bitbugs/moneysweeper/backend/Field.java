@@ -1,10 +1,14 @@
 package bitbugs.moneysweeper.backend;
 
 public class Field {
+    public int x;
+    public int y;
+    public boolean checked;
     private boolean isTagged;
     private boolean hasBomb;
     private int surroundingMines;
     private boolean turnedOver;
+
 
     public Field()
     {
@@ -12,6 +16,17 @@ public class Field {
         this.turnedOver = false;
         this.isTagged = false;
         this.surroundingMines = 0;
+    }
+
+    public Field(int x, int y, boolean checked, int surroundingMines)
+    {
+        this.x = x;
+        this.y = y;
+        this.checked = checked;
+        this.hasBomb = false;
+        this.turnedOver = false;
+        this.isTagged = false;
+        this.surroundingMines = surroundingMines;
     }
 
     public boolean getIsTagged() {
@@ -41,6 +56,4 @@ public class Field {
     public void setTurnedOver(boolean turnedOver) {
         this.turnedOver = turnedOver;
     }
-
-
 }
