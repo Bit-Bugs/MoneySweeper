@@ -195,8 +195,8 @@ private class Position{
         }
         calcList.add(new Position(x, y, fields[x][y].getSurroundingMines()));
 
-        if (fields[x][y].getSurroundingMines() == 0){
-            addSurroundingFields( x,y, calcList);
+        if (fields[x][y].getSurroundingMines() == 0){ //wenn keine
+            addSurroundingFields(x,y, calcList);
         }
     }
 
