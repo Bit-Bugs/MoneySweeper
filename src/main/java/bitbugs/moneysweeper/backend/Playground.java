@@ -120,21 +120,6 @@ public class Playground {
         }
     }
 
-    // Helper class representing a position on the field
-    private class Position {
-        public int x;
-        public int y;
-        public boolean isChecked;
-        public int surroundingMines;
-
-        public Position(int x, int y, boolean isChecked, int surroundingMines) {
-            this.x = x;
-            this.y = y;
-            this.isChecked = isChecked;
-            this.surroundingMines = surroundingMines;
-        }
-    }
-
     // Calculates all fields to uncover based on the given position
     public ArrayList<Field> calculateUncoverFields(int xPos, int yPos) {
         ArrayList<Field> result = new ArrayList<>();
@@ -161,25 +146,21 @@ public class Playground {
         }
 
         //nur mehr der Fall dass man ein Field geklickt hat dass keine nummer hat und keine bombe ist
-        ArrayList<Position> calcList = new ArrayList<Position>();
+        ArrayList<Field> calcList = new ArrayList<Field>();
 
         //berechnet alle Felder die aufgedeckt werden
         addSurroundingFields(xPos, yPos, calcList);
 
         //result list aufbauen
-        for (Position position : calcList) {
-            result.add(fields[position.x][position.y]);
+        for (Field field : calcList) {
+            result.add(fields[field.x][field.y]);
         }
-
         return result;
-
     }
 
     // Adds all valid surrounding fields to the calculation list
-    private void addSurroundingFields(int xPos, int yPos,  ArrayList<Position> calcList){
-
-        addOnlyNewFieldsToList(xPos, yPos, true,calcList);  //mitte mitte
-
+    private void addSurroundingFields(int xPos, int yPos,  ArrayList<Field> calcList){
+        addOnlyNewFieldsToList(xPos, yPos, true, calcList);  //mitte mitte
         addOnlyNewFieldsToList(xPos-1,yPos-1, false, calcList); //links oben
         addOnlyNewFieldsToList(xPos-1, yPos, false, calcList); //links mitte
         addOnlyNewFieldsToList(xPos-1, yPos+1, false, calcList); //links unten
@@ -190,16 +171,16 @@ public class Playground {
         addOnlyNewFieldsToList(xPos+1,yPos+1,false, calcList); //rechts unten
     }
 
-    private void addOnlyNewFieldsToList(int x, int y, boolean checked, ArrayList<Position> calcList) {
+    private void addOnlyNewFieldsToList(int x, int y, boolean checked, ArrayList<Field> calcList) {
         if ( !isInRange(x,y) ) {
             return;
         }
-        for (Position position : calcList) {
-            if (position.x == x && position.y == y){
+        for (Field field : calcList) {
+            if (field.x == x && field.y == y){
                 return; // Skip if the position already exists in the list
             }
         }
-        calcList.add(new Position(x, y, checked, fields[x][y].getSurroundingMines()));
+        calcList.add(new Field(x, y, checked, fields[x][y].getSurroundingMines()));
     }
 
     // Checks if the given position is within the field's bounds
