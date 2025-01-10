@@ -17,26 +17,7 @@ public class Playground {
     // Constructor initializes the playground based on the selected difficulty
     public Playground(Difficulty difficulty, int[] difficultySize) {
         this.difficulty = difficulty;
-
-        // Set the playground size based on the difficulty level
-        if (difficulty.equals(Difficulty.EASY)) {
-            this.difficultySize[0] = 8;
-            this.difficultySize[1] = 8;
-        }
-
-        if (difficulty.equals(Difficulty.MID)) {
-            this.difficultySize[0] = 16;
-            this.difficultySize[1] = 16;
-        }
-
-        if (difficulty.equals(Difficulty.HARD)) {
-            this.difficultySize[0] = 30;
-            this.difficultySize[1] = 16;
-        }
-
-        if(difficulty.equals(Difficulty.CUSTOM)) {
-            this.difficultySize = difficultySize;
-        }
+        this.difficultySize = difficultySize;
 
         // Initialize the fields array with empty Field objects
         setFields(new Field[difficultySize[0]][difficultySize[1]]);

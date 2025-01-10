@@ -97,15 +97,11 @@ public class MenuController {
                 fieldHeight.setText("16");
 
                 loadScoreboard(Difficulty.HARD);
-            } else {
-                fieldWidth.setText("8");
-                fieldHeight.setText("8");
-
+            } else if (difficulty.getSelectedToggle() == customDifficulty) {
                 loadScoreboard(Difficulty.CUSTOM);
             }
 
         });
-
 
         bombs.setTextFormatter(getNumberRangeFilter(0, 668, bombs));
         fieldWidth.setTextFormatter(getNumberRangeFilter(0, 30, fieldWidth));
@@ -113,11 +109,21 @@ public class MenuController {
     }
 
     @FXML
-    public void handlePlayButtonClick(ActionEvent event) {
+    public void handlePlayButtonClick(ActionEvent event)
+    {
+
+        String difficultyValue = ((ToggleButton) difficulty.getSelectedToggle()).getText();
+        if (difficultyValue =="")
+        {
+            difficultyValue ="CUSTOM";
+        }
+        Difficulty selectedDifficulty = (Difficulty) Difficulty.valueOf(difficultyValue.toUpperCase());
+
         var highscore = scoreboardItems.isEmpty() ? 0 : scoreboardItems.getFirst().score();
         var menuDto = new MenuDto(getBombs(), Integer.parseInt(fieldWidth.getText()),
-                Integer.parseInt(fieldHeight.getText()), highscore);
+                Integer.parseInt(fieldHeight.getText()), highscore, selectedDifficulty);
         SceneManager.getInstance().setScene("in-game.fxml", new SceneData<>(menuDto));
+
     }
 
     private void loadScoreboard(Difficulty difficulty) {

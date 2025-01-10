@@ -1,4 +1,6 @@
 package bitbugs.moneysweeper.gui.dto;
 
-public record MenuDto(int bombs, int fieldWidth, int fieldHeight, double highscore) {
+import bitbugs.moneysweeper.gui.Difficulty;
+
+public record MenuDto(int bombs, int fieldWidth, int fieldHeight, double highscore, Difficulty difficulty) {
 }
