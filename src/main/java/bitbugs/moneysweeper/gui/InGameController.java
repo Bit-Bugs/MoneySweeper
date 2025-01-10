@@ -1,5 +1,6 @@
 package bitbugs.moneysweeper.gui;
 
+import bitbugs.moneysweeper.backend.Playground;
 import bitbugs.moneysweeper.gui.dto.LoseDto;
 import bitbugs.moneysweeper.gui.dto.MenuDto;
 import javafx.animation.AnimationTimer;
@@ -36,13 +37,15 @@ public class InGameController {
     public void initialize() {
         var sceneData = (MenuDto) SceneManager.getInstance().getSceneData().data();
         highscore.setText(String.valueOf(sceneData.highscore()));
-
         GridPane gameboard = new GridPane();
         gameboard.getStyleClass().add("gameboard");
         gameboardContainer.getChildren().add(gameboard);
         gameboard.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         gameboard.setVgap(4);
         gameboard.setHgap(4);
+
+        int[] playgroundSize = new int[]{sceneData.fieldWidth(), sceneData.fieldHeight()};
+
 
         for (int x = 0; x < sceneData.fieldWidth(); x++) {
             for (int y = 0; y < sceneData.fieldHeight(); y++) {
@@ -78,6 +81,7 @@ public class InGameController {
             rowConstraints.setVgrow(Priority.ALWAYS);
             gameboard.getRowConstraints().add(rowConstraints);
         }
+        Playground playground = new Playground(sceneData.difficulty(), playgroundSize);
 
         // init timer
         var startTime = System.nanoTime();
