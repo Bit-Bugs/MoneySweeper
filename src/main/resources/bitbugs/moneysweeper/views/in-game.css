@@ -8,6 +8,10 @@
 
 .field-button {
     -fx-background-insets: 0;
+    -fx-background-color: #8e8e8e
+}
+
+.field-button:disabled {
     -fx-background-color: white;
 }
 

@@ -26,7 +26,7 @@ public class Playground {
         setFields(new Field[difficultySize[0]][difficultySize[1]]);
         for (int x = 0; x < difficultySize[0]; x++) {
             for (int y = 0; y < difficultySize[1]; y++) {
-                this.fields[x][y] = new Field();
+                this.fields[x][y] = new Field(x,y);
             }
         }
 
@@ -193,6 +193,10 @@ public class Playground {
             }
         }
         calcList.add(new Field(x, y, checked, fields[x][y].getSurroundingMines()));
+
+        if (fields[x][y].getSurroundingMines() == 0){
+            addSurroundingFields(x,y, calcList);
+        }
     }
 
     // Checks if the given position is within the field's bounds

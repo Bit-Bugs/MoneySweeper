@@ -10,8 +10,10 @@ public class Field {
     private boolean turnedOver;
 
 
-    public Field()
+    public Field(int x, int y)
     {
+        this.x = x;
+        this.y = y;
         this.hasBomb = false;
         this.turnedOver = false;
         this.isTagged = false;

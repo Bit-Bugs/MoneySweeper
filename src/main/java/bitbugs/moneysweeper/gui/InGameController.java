@@ -1,5 +1,6 @@
 package bitbugs.moneysweeper.gui;
 
+import bitbugs.moneysweeper.backend.Field;
 import bitbugs.moneysweeper.backend.Playground;
 import bitbugs.moneysweeper.gui.dto.FinishDto;
 import bitbugs.moneysweeper.gui.dto.MenuDto;
@@ -7,12 +8,14 @@ import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 public class InGameController {
 
@@ -54,25 +57,33 @@ public class InGameController {
                 fieldText.setTextAlignment(TextAlignment.CENTER);
 
                 var field = new Button();
-                field.setId(x + y + "");
+                field.setId(x + "-" + y);
                 field.getStyleClass().add("field-button");
                 field.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
                 var xPos = x;
                 var yPos = y;
                 field.setOnMouseClicked(event -> {
-                    var lose = playground.fieldHasMine(xPos, yPos);
-                    if (lose) {
-                        var finishDto = new FinishDto(time.getText());
-                        SceneManager.getInstance().setScene("lose.fxml", new SceneData<>(finishDto));
+                    if (event.getButton() == MouseButton.PRIMARY) {
+                        var lose = playground.fieldHasMine(xPos, yPos);
+                        if (lose) {
+                            var finishDto = new FinishDto(time.getText());
+                            SceneManager.getInstance().setScene("lose.fxml", new SceneData<>(finishDto));
+                        }
+
+                        var values = playground.calculateUncoverFields(xPos, yPos);
+
+                        values.forEach(value -> {
+                            var gameField = (Button) gameboard.lookup("#" + value.getX() + "-" + value.getY());
+                            var text = ((Text) gameField.getChildrenUnmodifiable().getFirst());
+                            if (value.getSurroundingMines() > 0) {
+                                text.setText(value.getSurroundingMines() + "");
+                            } else if (!text.getText().isEmpty()) {
+                                placeFlag(text, value.getX(), value.getY());
+                            }
+                            gameField.setDisable(true);
+                        });
                     }
-
-                    var values = playground.calculateUncoverFields(xPos, yPos);
-
-                    values.forEach(value -> {
-                        var gameField = (Button) gameboard.lookup(value.getX() + value.getY() + "");
-                        gameField.setText(value.getSurroundingMines() + "");
-                    });
                 });
 
                 field.setGraphic(fieldText);
