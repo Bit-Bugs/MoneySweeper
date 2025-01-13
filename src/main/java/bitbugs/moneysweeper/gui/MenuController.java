@@ -1,5 +1,6 @@
 package bitbugs.moneysweeper.gui;
 
+import bitbugs.moneysweeper.backend.ScoreboardDataHandling;
 import bitbugs.moneysweeper.gui.dto.MenuDto;
 import bitbugs.moneysweeper.gui.dto.ScoreboardEntry;
 import javafx.application.Platform;
@@ -8,6 +9,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Screen;
+
+import java.util.Arrays;
 
 public class MenuController {
     @FXML
@@ -118,12 +122,14 @@ public class MenuController {
 
     private void loadScoreboard(Difficulty difficulty) {
         if (difficulty == Difficulty.EASY) {
-            scoreboardItems.add(new ScoreboardEntry("ByteMe 🤖", "1"));
-            scoreboardItems.add(new ScoreboardEntry("MemoryLeakMaster5000", "2"));
+            ScoreboardEntry[] entries = ScoreboardDataHandling.loadScoreboard(Difficulty.EASY);
+            scoreboardItems.addAll(Arrays.asList(entries));
         } else if (difficulty == Difficulty.MID) {
-
+            ScoreboardEntry[] entries = ScoreboardDataHandling.loadScoreboard(Difficulty.MID);
+            scoreboardItems.addAll(Arrays.asList(entries));
         } else if (difficulty == Difficulty.HARD) {
-
+            ScoreboardEntry[] entries = ScoreboardDataHandling.loadScoreboard(Difficulty.HARD);
+            scoreboardItems.addAll(Arrays.asList(entries));
         } else if (difficulty == Difficulty.CUSTOM) {
         }
 
