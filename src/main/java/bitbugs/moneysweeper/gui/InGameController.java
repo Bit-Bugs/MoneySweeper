@@ -67,7 +67,7 @@ public class InGameController {
                     if (event.getButton() == MouseButton.PRIMARY) {
                         var lose = playground.fieldHasMine(xPos, yPos);
                         if (lose) {
-                            var finishDto = new FinishDto(time.getText());
+                            var finishDto = new FinishDto(time.getText(), sceneData.difficulty());
                             SceneManager.getInstance().setScene("lose.fxml", new SceneData<>(finishDto));
                         }
 
@@ -126,7 +126,7 @@ public class InGameController {
                 var hasWon = playground.checkIfWon();
 
                 if (hasWon) {
-                    var finishDto = new FinishDto(time.getText());
+                    var finishDto = new FinishDto(time.getText(), sceneData.difficulty());
                     SceneManager.getInstance().setScene("win.fxml", new SceneData<>(finishDto));
                 }
             }
