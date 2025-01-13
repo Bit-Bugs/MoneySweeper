@@ -90,6 +90,31 @@ public class Playground {
         return false;
     }
 
+    //Checks if player has won
+    public boolean checkIfWon()
+    {
+        //Iterate through the plaground
+        for (int x = 0; x < getDifficultySize()[0]; x++)
+        {
+            for (int y = 0; y <getDifficultySize()[1] ; y++)
+            {
+                //Condition 1: Check if every non-bomb-field is turned over
+              if (!fields[x][y].getTurnedOver() && !fields[x][y].getHasBomb())
+              {
+                  return false;
+              }
+
+              //Condition 2: Check if every bomb-field is tagged
+              if (!fields[x][y].getIsTagged() && fields[x][y].getHasBomb())
+              {
+                  return false;
+              }
+
+            }
+        }
+        return true;
+    }
+
     // Calculates the number of surrounding mines for each field
     private void calculateSurroundingMines() {
         // Relative positions of the eight neighboring fields
@@ -106,7 +131,6 @@ public class Playground {
                 for (int[] pos : positions) {
                     int xNeighbor = x + pos[0];
                     int yNeighbor = y + pos[1];
-
                     // If a neighboring field has a mine, increment the count
                     if (fieldHasMine(xNeighbor, yNeighbor)) {
                         fields[x][y].setSurroundingMines(fields[x][y].getSurroundingMines() + 1);
@@ -167,7 +191,9 @@ public class Playground {
         for (Field field : calcList) {
             result.add(fields[field.x][field.y]);
         }
+
         return result;
+
     }
 
     // Adds all valid surrounding fields to the calculation list
@@ -208,10 +234,6 @@ public class Playground {
             return false;
         }
         return true;
-    }
-
-    public boolean checkIfWon() {
-        return false;
     }
 
     public Field getField(int x, int y) {
