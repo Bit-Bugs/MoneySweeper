@@ -1,4 +1,6 @@
 package bitbugs.moneysweeper.gui.dto;
 
-public record FinishDto(String time) {
+import bitbugs.moneysweeper.gui.Difficulty;
+
+public record FinishDto(String time, Difficulty difficulty) {
 }
