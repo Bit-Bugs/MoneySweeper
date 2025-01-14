@@ -47,6 +47,9 @@ public class InGameController {
 
         int[] playgroundSize = new int[]{sceneData.fieldWidth(), sceneData.fieldHeight()};
         this.playground = sceneData.difficulty() == Difficulty.CUSTOM ? new Playground(sceneData.difficulty(), playgroundSize) : new Playground(sceneData.difficulty());
+        if(playground.getDifficulty() == Difficulty.CUSTOM) {
+            playground.setBombs(sceneData.bombs());
+        }
 
         // generate gameboard
         for (int x = 0; x < playground.getDifficultySize()[0]; x++) {
@@ -120,7 +123,7 @@ public class InGameController {
         };
         timer.start();
 
-        flags.setText(sceneData.bombs() + "");
+        flags.setText(playground.getBombs() + "");
         flags.textProperty().addListener((observable, oldValue, newValue) -> {
             if (Integer.parseInt(flags.getText()) == 0) {
                 var hasWon = playground.checkIfWon();

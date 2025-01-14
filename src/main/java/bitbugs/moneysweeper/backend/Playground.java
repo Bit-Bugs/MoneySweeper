@@ -17,8 +17,7 @@ public class Playground {
     // Stores the bomb-count of the playground
     private int bombs;
 
-    public Playground()
-    {
+    public Playground() {
     }
 
     // Constructor initializes the playground based on the selected difficulty
@@ -30,7 +29,7 @@ public class Playground {
         setFields(new Field[difficultySize[0]][difficultySize[1]]);
         for (int x = 0; x < difficultySize[0]; x++) {
             for (int y = 0; y < difficultySize[1]; y++) {
-                this.fields[x][y] = new Field(x,y);
+                this.fields[x][y] = new Field(x, y);
             }
         }
 
@@ -95,24 +94,19 @@ public class Playground {
     }
 
     //Checks if player has won
-    public boolean checkIfWon()
-    {
+    public boolean checkIfWon() {
         //Iterate through the plaground
-        for (int x = 0; x < getDifficultySize()[0]; x++)
-        {
-            for (int y = 0; y <getDifficultySize()[1] ; y++)
-            {
+        for (int x = 0; x < getDifficultySize()[0]; x++) {
+            for (int y = 0; y < getDifficultySize()[1]; y++) {
                 //Condition 1: Check if every non-bomb-field is turned over
-              if (!fieldIsTurnedOver(x,y) && fieldHasMine(x, y))
-              {
-                  return false;
-              }
+                if (!fieldIsTurnedOver(x, y) && fieldHasMine(x, y)) {
+                    return false;
+                }
 
-              //Condition 2: Check if every bomb-field is tagged
-              if (!fieldIsTagged(x,y) && fieldHasMine(x, y))
-              {
-                  return false;
-              }
+                //Condition 2: Check if every bomb-field is tagged
+                if (!fieldIsTagged(x, y) && fieldHasMine(x, y)) {
+                    return false;
+                }
 
             }
         }
@@ -149,32 +143,22 @@ public class Playground {
         Random rnd = new Random();
         int x, y;
 
-       switch (difficulty)
-       {
-           case CUSTOM:
-               break;
+        this.bombs = switch (difficulty) {
+            case HARD -> 99;
+            case MID -> 40;
+            case EASY -> 10;
+            case CUSTOM -> bombs;
+        };
 
-           case HARD:
-               bombs = Integer.valueOf((int)(difficultySize[0] * difficultySize[1] * 0.25));
+        while (bombs > 0) {
+            x = rnd.nextInt(difficultySize[0]);
+            y = rnd.nextInt(difficultySize[1]);
 
-           case MID:
-               bombs = Integer.valueOf((int)(difficultySize[0] * difficultySize[1] * 0.15));
-
-           case EASY:
-               bombs = Integer.valueOf((int)(difficultySize[0] * difficultySize[1] * 0.1));
-       }
-
-       while(bombs>0)
-       {
-           x = rnd.nextInt(difficultySize[0]);
-           y = rnd.nextInt(difficultySize[1]);
-
-           if(!fieldHasMine(x,y))
-           {
-               fields[x][y].setHasBomb(true);
-               bombs--;
-           }
-       }
+            if (!fieldHasMine(x, y)) {
+                fields[x][y].setHasBomb(true);
+                bombs--;
+            }
+        }
     }
 
     // Calculates all fields to uncover based on the given position
@@ -217,19 +201,15 @@ public class Playground {
 
     }
 
-    public boolean fieldIsTurnedOver(int x, int y)
-    {
-        if (fields[x][y].getTurnedOver())
-        {
+    public boolean fieldIsTurnedOver(int x, int y) {
+        if (fields[x][y].getTurnedOver()) {
             return true;
         }
         return false;
     }
 
-    public boolean fieldIsTagged(int x, int y)
-    {
-        if(fields[x][y].getIsTagged())
-        {
+    public boolean fieldIsTagged(int x, int y) {
+        if (fields[x][y].getIsTagged()) {
             return true;
         }
         return false;
@@ -259,8 +239,8 @@ public class Playground {
         }
         calcList.add(new Field(x, y, checked, fields[x][y].getSurroundingMines()));
 
-        if (fields[x][y].getSurroundingMines() == 0){
-            addSurroundingFields(x,y, calcList);
+        if (fields[x][y].getSurroundingMines() == 0) {
+            addSurroundingFields(x, y, calcList);
         }
     }
 
@@ -279,8 +259,11 @@ public class Playground {
         return fields[x][y];
     }
 
-    public int getBombs()
-    {
+    public int getBombs() {
         return this.bombs;
+    }
+
+    public void setBombs(int bombs){
+        this.bombs = bombs;
     }
 }
