@@ -14,7 +14,11 @@ public class Playground {
     // Array representing the size of the playground based on difficulty
     private int[] difficultySize;
 
-    public Playground() {
+    // Stores the bomb-count of the playground
+    private int bombs;
+
+    public Playground()
+    {
     }
 
     // Constructor initializes the playground based on the selected difficulty
@@ -99,13 +103,13 @@ public class Playground {
             for (int y = 0; y <getDifficultySize()[1] ; y++)
             {
                 //Condition 1: Check if every non-bomb-field is turned over
-              if (!fields[x][y].getTurnedOver() && !fields[x][y].getHasBomb())
+              if (!fieldIsTurnedOver(x,y) && fieldHasMine(x, y))
               {
                   return false;
               }
 
               //Condition 2: Check if every bomb-field is tagged
-              if (!fields[x][y].getIsTagged() && fields[x][y].getHasBomb())
+              if (!fieldIsTagged(x,y) && fieldHasMine(x, y))
               {
                   return false;
               }
@@ -145,15 +149,32 @@ public class Playground {
         Random rnd = new Random();
         int x, y;
 
-        for (int i = 0; i < difficultySize[0]; i++) {
-            x = rnd.nextInt(difficultySize[0]);
-            y = rnd.nextInt(difficultySize[1]);
+       switch (difficulty)
+       {
+           case CUSTOM:
+               break;
 
-            // Only place a mine if the field does not already have one
-            if (!fieldHasMine(x, y)) {
-                fields[x][y].setHasBomb(true);
-            }
-        }
+           case HARD:
+               bombs = Integer.valueOf((int)(difficultySize[0] * difficultySize[1] * 0.25));
+
+           case MID:
+               bombs = Integer.valueOf((int)(difficultySize[0] * difficultySize[1] * 0.15));
+
+           case EASY:
+               bombs = Integer.valueOf((int)(difficultySize[0] * difficultySize[1] * 0.1));
+       }
+
+       while(bombs>0)
+       {
+           x = rnd.nextInt(difficultySize[0]);
+           y = rnd.nextInt(difficultySize[1]);
+
+           if(!fieldHasMine(x,y))
+           {
+               fields[x][y].setHasBomb(true);
+               bombs--;
+           }
+       }
     }
 
     // Calculates all fields to uncover based on the given position
@@ -164,13 +185,13 @@ public class Playground {
         if (xPos < 0 || xPos >= getDifficultySize()[0] || yPos >= getDifficultySize()[1] || yPos < 0) {
             return result;
         }
-        if (fields[xPos][yPos].getTurnedOver()) {
+        if (fieldIsTurnedOver(xPos, yPos)) {
             //noch alle aufklappen die eh klar sind
             return result;
         }
 
         // If the field contains a mine, uncover only this field
-        if (fields[xPos][yPos].getHasBomb()) {
+        if (fieldHasMine(xPos, yPos)) {
             result.add(fields[xPos][yPos]);
             return result;
         }
@@ -194,6 +215,24 @@ public class Playground {
 
         return result;
 
+    }
+
+    public boolean fieldIsTurnedOver(int x, int y)
+    {
+        if (fields[x][y].getTurnedOver())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean fieldIsTagged(int x, int y)
+    {
+        if(fields[x][y].getIsTagged())
+        {
+            return true;
+        }
+        return false;
     }
 
     // Adds all valid surrounding fields to the calculation list
@@ -238,5 +277,10 @@ public class Playground {
 
     public Field getField(int x, int y) {
         return fields[x][y];
+    }
+
+    public int getBombs()
+    {
+        return this.bombs;
     }
 }
