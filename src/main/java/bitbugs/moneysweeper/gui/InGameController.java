@@ -152,13 +152,18 @@ public class InGameController {
      * @param fieldText
      */
     private void placeFlag(Text fieldText, int x, int y) {
-        if (!playground.getField(x, y).getIsTagged() && Integer.parseInt(flags.getText()) > 0) {
+        if (!playground.getField(x, y).getIsTagged() && Integer.parseInt(flags.getText()) > 0)
+        {
             fieldText.setText("🚨");
             flags.setText(Integer.parseInt(flags.getText()) - 1 + "");
-        } else if (playground.getField(x, y).getIsTagged()) {
+            playground.tagField(x, y);
+        }
+        else if (playground.getField(x, y).getIsTagged())
+        {
             fieldText.setText("");
             flags.setText(Integer.parseInt(flags.getText()) + 1 + "");
+            playground.tagField(x, y);
         }
-        playground.tagField(x, y);
+
     }
 }

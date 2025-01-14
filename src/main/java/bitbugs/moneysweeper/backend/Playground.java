@@ -150,13 +150,14 @@ public class Playground {
             case CUSTOM -> bombs;
         };
 
-        while (bombs > 0) {
+        for (int i = 0; i < bombs;) {
             x = rnd.nextInt(difficultySize[0]);
             y = rnd.nextInt(difficultySize[1]);
 
+            // Only place a mine if the field does not already have one
             if (!fieldHasMine(x, y)) {
                 fields[x][y].setHasBomb(true);
-                bombs--;
+                i++;
             }
         }
     }
