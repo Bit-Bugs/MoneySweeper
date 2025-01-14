@@ -95,10 +95,8 @@ public class Playground {
 
     //Checks if player has won
     public boolean checkIfWon() {
-        //Iterate through the plaground
         for (Field[] row : fields) {
             for (Field field : row) {
-                // If a non-bomb field is not revealed, the player hasn't won
                 if (field.getHasBomb() && field.getIsTagged()) {
                     return true;
                 }
