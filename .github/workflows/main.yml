@@ -24,7 +24,6 @@ jobs:
 
       - name: Build with Gradle
         run: ${{ matrix.gradle-command }} jlink
-        shell: bash
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
