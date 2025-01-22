@@ -95,24 +95,13 @@ public class Playground {
 
     //Checks if player has won
     public boolean checkIfWon() {
-    /*    //Iterate through the playground
-        for (int x = 0; x < getDifficultySize()[0]; x++) {
-            for (int y = 0; y < getDifficultySize()[1]; y++) {
-                //Condition 1: Check if every non-bomb-field is turned over
-                if (!fieldIsTurnedOver(x, y) && fieldHasMine(x, y)) {
-                    return false;
-                }
+        var taggedBombs = Arrays.stream(fields)
+                .flatMap(Arrays::stream)
+                .filter(Field::getHasBomb)
+                .filter(Field::getIsTagged)
+                .count();
 
-                //Condition 2: Check if every bomb-field is tagged
-                if (!fieldIsTagged(x, y) && fieldHasMine(x, y)) {
-                    return false;
-                }
-
-            }
-        }
-        return true;*/
-
-        return true;
+        return taggedBombs == bombs;
     }
 
     // Calculates the number of surrounding mines for each field
