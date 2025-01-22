@@ -11,6 +11,7 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
+        gradle-command: [./gradlew, ./gradlew, gradlew.bat]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -22,12 +23,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Build with Gradle
-        run: |
-          if [ $RUNNER_OS == 'Windows' ]; then
-            gradlew.bat jlink
-          else
-            ./gradlew jlink
-          fi
+        run: ${{ matrix.gradle-command }} jlink
         shell: bash
 
       - name: Upload Build Artifact
