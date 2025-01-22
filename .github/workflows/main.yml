@@ -42,7 +42,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Build Windows Runtime
-        run: gradlew jlink
+        run: gradlew.bat jlink
 
       - name: Upload Windows Runtime
         uses: actions/upload-artifact@v3
