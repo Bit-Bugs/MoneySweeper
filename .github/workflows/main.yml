@@ -28,3 +28,9 @@ jobs:
           else
             ./gradlew jlink
           fi
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: runtime-${{ matrix.os }}
+          path: build/image
