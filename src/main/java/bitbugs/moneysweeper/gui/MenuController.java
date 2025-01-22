@@ -1,15 +1,14 @@
 package bitbugs.moneysweeper.gui;
 
+import bitbugs.moneysweeper.backend.Playground;
 import bitbugs.moneysweeper.backend.ScoreboardDataHandling;
 import bitbugs.moneysweeper.gui.dto.MenuDto;
 import bitbugs.moneysweeper.gui.dto.ScoreboardEntry;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.stage.Screen;
 
 import java.util.Arrays;
 
@@ -37,10 +36,12 @@ public class MenuController {
     @FXML
     public void initialize() {
         ScoreboardDataHandling.loadFromFile();
-        difficultyEasy.setUserData(10);
-        difficultyMid.setUserData(40);
-        difficultyHard.setUserData(99);
-//        difficultyEasy.setUserData(new GamemodeToggleDto(8,8,10));
+        difficultyEasy.setUserData(Difficulty.EASY);
+        difficultyMid.setUserData(Difficulty.MID);
+        difficultyHard.setUserData(Difficulty.HARD);
+        customDifficulty.setUserData(Difficulty.CUSTOM);
+        fieldWidth.setUserData(8);
+        fieldHeight.setUserData(8);
 
         scoreboard.setItems(scoreboardItems);
         //set scoreboard for default selected gamemode (easy)
@@ -51,20 +52,19 @@ public class MenuController {
             customDifficulty.setSelected(true);
             fieldWidth.setDisable(false);
             fieldHeight.setDisable(false);
-            playButton.setDisable(bombs.getText().isEmpty());
+            handlePlayButtonAvailability();
         });
 
         bombs.textProperty().addListener((observable, oldValue, newValue) -> {
-            playButton.setDisable((newValue).isEmpty());
+            handlePlayButtonAvailability();
         });
 
         fieldWidth.textProperty().addListener((observable, oldValue, newValue) -> {
-            playButton.setDisable((newValue).isEmpty() || Integer.parseInt(newValue) < 1);
-
+            handlePlayButtonAvailability();
         });
 
         fieldHeight.textProperty().addListener((observable, oldValue, newValue) -> {
-            playButton.setDisable((newValue).isEmpty() || Integer.parseInt(newValue) < 1);
+            handlePlayButtonAvailability();
         });
 
         difficulty.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
@@ -74,8 +74,6 @@ public class MenuController {
                 fieldHeight.setDisable(true);
                 playButton.setDisable(false);
             }
-
-//            fieldWidth.textProperty().bind();
 
             scoreboardItems.clear();
 
@@ -94,31 +92,31 @@ public class MenuController {
             } else if (difficulty.getSelectedToggle() == customDifficulty) {
                 loadScoreboard(Difficulty.CUSTOM);
             }
-
-            fieldHeight.textProperty().set("9");
         });
 
         bombs.setTextFormatter(getNumberRangeFilter(1, 668, bombs));
-        fieldWidth.setTextFormatter(getNumberRangeFilter(2, 30, fieldWidth));
-        fieldHeight.setTextFormatter(getNumberRangeFilter(2, 24, fieldHeight));
+        fieldWidth.setTextFormatter(getNumberRangeFilter(1, 30, fieldWidth));
+        fieldHeight.setTextFormatter(getNumberRangeFilter(1, 24, fieldHeight));
     }
 
     @FXML
-    public void handlePlayButtonClick(ActionEvent event)
-    {
-
-        String difficultyValue = ((ToggleButton) difficulty.getSelectedToggle()).getText();
-        if (difficultyValue =="")
-        {
-            difficultyValue ="CUSTOM";
-        }
-        Difficulty selectedDifficulty = (Difficulty) Difficulty.valueOf(difficultyValue.toUpperCase());
-
+    public void handlePlayButtonClick(ActionEvent event) {
         var highscore = scoreboardItems.isEmpty() ? "0" : scoreboardItems.getFirst().time();
-        var menuDto = new MenuDto(getBombs(), Integer.parseInt(fieldWidth.getText()),
-                Integer.parseInt(fieldHeight.getText()), highscore, selectedDifficulty);
-        SceneManager.getInstance().setScene("in-game.fxml", new SceneData<>(menuDto));
+        var selectedDifficulty = (Difficulty) difficulty.getSelectedToggle().getUserData();
+        var playground = new Playground();
 
+        if (selectedDifficulty == Difficulty.CUSTOM) {
+            playground = new Playground(
+                    selectedDifficulty,
+                    new int[]{Integer.parseInt(fieldWidth.getText()), Integer.parseInt(fieldHeight.getText())},
+                    (int) bombs.getUserData()
+            );
+        } else {
+            playground = new Playground(selectedDifficulty);
+        }
+
+        var menuDto = new MenuDto(playground, highscore);
+        SceneManager.getInstance().setScene("in-game.fxml", new SceneData<>(menuDto));
     }
 
     private void loadScoreboard(Difficulty difficulty) {
@@ -132,9 +130,7 @@ public class MenuController {
         } else if (difficulty == Difficulty.HARD) {
             ScoreboardEntry[] entries = ScoreboardDataHandling.loadScoreboard(Difficulty.HARD);
             scoreboardItems.addAll(Arrays.asList(entries));
-        } else if (difficulty == Difficulty.CUSTOM) {
         }
-
     }
 
     private TextFormatter<String> getNumberRangeFilter(int from, int to, TextField currentValue) {
@@ -151,10 +147,24 @@ public class MenuController {
         });
     }
 
-    private int getBombs() {
-        if (bombs.getText().isEmpty()) {
-            return (int) difficulty.getSelectedToggle().getUserData();
+    private void handlePlayButtonAvailability(){
+        var disabled = false;
+
+        if (!bombs.getText().isEmpty() && !fieldWidth.getText().isEmpty() && !fieldHeight.getText().isEmpty()) {
+            var newBombs = Integer.parseInt(bombs.getText());
+            var width = Integer.parseInt(fieldWidth.getText());
+            var height = Integer.parseInt(fieldHeight.getText());
+            bombs.setUserData(newBombs);
+            fieldWidth.setUserData(width);
+            fieldHeight.setUserData(height);
+
+            if(newBombs > width * height || width < 2 || height < 2){
+                disabled = true;
+            }
+        } else {
+            disabled = true;
         }
-        return Integer.parseInt(bombs.getText());
+
+        playButton.setDisable(disabled);
     }
 }

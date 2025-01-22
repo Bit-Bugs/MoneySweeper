@@ -1,6 +1,7 @@
 package bitbugs.moneysweeper.gui.dto;
 
+import bitbugs.moneysweeper.backend.Playground;
 import bitbugs.moneysweeper.gui.Difficulty;
 
-public record MenuDto(int bombs, int fieldWidth, int fieldHeight, String highscore, Difficulty difficulty) {
+public record MenuDto(Playground playground, String highscore) {
 }

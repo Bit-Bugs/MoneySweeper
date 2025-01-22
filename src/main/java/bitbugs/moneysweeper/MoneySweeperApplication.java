@@ -16,24 +16,20 @@ public class MoneySweeperApplication extends Application {
         sceneManager.setScene("menu.fxml");
         var iconPath = getClass().getResource("/bitbugs/moneysweeper/icon.png");
 
-        // Prüfen, ob der Pfad zur Symboldatei gültig ist
+        // check if icon path is valid
         if (iconPath != null) {
             stage.getIcons().add(new Image(iconPath.toString()));
 
-            // Dock-Symbol für macOS setzen, falls unterstützt
+            // check if taskbar api is supported
             if (Taskbar.isTaskbarSupported()) {
                 try {
                     final Taskbar taskbar = Taskbar.getTaskbar();
-
-                    // Bild für das Dock-Symbol aus der Symboldatei erstellen
                     var image = new ImageIcon(iconPath).getImage();
 
-                    // Prüfen, ob das Ändern des Dock-Symbols unterstützt wird
                     if (taskbar.isSupported(Taskbar.Feature.ICON_IMAGE)) {
-                        taskbar.setIconImage(image); // Dock-Symbol setzen
+                        taskbar.setIconImage(image);
                     }
                 } catch (UnsupportedOperationException | SecurityException e) {
-                    // Fehler beim Ändern des Dock-Symbols ausgeben
                     System.err.println("Taskbar icon setting not supported: " + e.getMessage());
                 }
             }

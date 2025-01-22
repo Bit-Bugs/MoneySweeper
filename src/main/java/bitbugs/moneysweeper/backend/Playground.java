@@ -21,9 +21,15 @@ public class Playground {
     }
 
     // Constructor initializes the playground based on the selected difficulty
-    public Playground(Difficulty difficulty, int[] difficultySize) {
+    public Playground(Difficulty difficulty, int[] difficultySize, int bombs) {
         this.difficulty = difficulty;
         this.difficultySize = difficultySize;
+        this.bombs = switch (difficulty) {
+            case HARD -> 99;
+            case MID -> 40;
+            case EASY -> 10;
+            case CUSTOM -> bombs;
+        };
 
         // Initialize the fields array with empty Field objects
         setFields(new Field[difficultySize[0]][difficultySize[1]]);
@@ -41,7 +47,7 @@ public class Playground {
     }
 
     public Playground(Difficulty difficulty) {
-        this(difficulty, getGameboardSize(difficulty));
+        this(difficulty, getGameboardSize(difficulty), 0);
     }
 
     private static int[] getGameboardSize(Difficulty difficulty) {
@@ -133,13 +139,6 @@ public class Playground {
     private void placeMines() {
         Random rnd = new Random();
         int x, y;
-
-        this.bombs = switch (difficulty) {
-            case HARD -> 99;
-            case MID -> 40;
-            case EASY -> 10;
-            case CUSTOM -> bombs;
-        };
 
         for (int i = 0; i < bombs;) {
             x = rnd.nextInt(difficultySize[0]);

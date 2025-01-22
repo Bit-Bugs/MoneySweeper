@@ -1,6 +1,5 @@
 package bitbugs.moneysweeper.gui;
 
-import bitbugs.moneysweeper.backend.Field;
 import bitbugs.moneysweeper.backend.Playground;
 import bitbugs.moneysweeper.gui.dto.FinishDto;
 import bitbugs.moneysweeper.gui.dto.MenuDto;
@@ -15,7 +14,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
 
 public class InGameController {
 
@@ -36,6 +34,7 @@ public class InGameController {
     @FXML
     public void initialize() {
         var sceneData = (MenuDto) SceneManager.getInstance().getSceneData().data();
+        this.playground = sceneData.playground();
         highscore.setText(String.valueOf(sceneData.highscore()));
 
         GridPane gameboard = new GridPane();
@@ -44,12 +43,6 @@ public class InGameController {
         gameboard.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         gameboard.setVgap(4);
         gameboard.setHgap(4);
-
-        int[] playgroundSize = new int[]{sceneData.fieldWidth(), sceneData.fieldHeight()};
-        this.playground = sceneData.difficulty() == Difficulty.CUSTOM ? new Playground(sceneData.difficulty(), playgroundSize) : new Playground(sceneData.difficulty());
-        if(playground.getDifficulty() == Difficulty.CUSTOM) {
-            playground.setBombs(sceneData.bombs());
-        }
 
         // generate gameboard
         for (int x = 0; x < playground.getDifficultySize()[0]; x++) {
@@ -70,7 +63,7 @@ public class InGameController {
                     if (event.getButton() == MouseButton.PRIMARY) {
                         var lose = playground.fieldHasMine(xPos, yPos);
                         if (lose) {
-                            var finishDto = new FinishDto(time.getText(), sceneData.difficulty());
+                            var finishDto = new FinishDto(time.getText(), playground.getDifficulty());
                             SceneManager.getInstance().setScene("lose.fxml", new SceneData<>(finishDto));
                         }
 
@@ -100,13 +93,13 @@ public class InGameController {
         }
 
         //Make columns & rows inside gridpane fill its parent
-        for (int column = 0; column < sceneData.fieldWidth(); column++) {
+        for (int column = 0; column < playground.getDifficultySize()[0]; column++) {
             var columnConstraints = new ColumnConstraints();
             columnConstraints.setHgrow(Priority.ALWAYS);
             gameboard.getColumnConstraints().add(columnConstraints);
         }
 
-        for (int row = 0; row < sceneData.fieldHeight(); row++) {
+        for (int row = 0; row < playground.getDifficultySize()[1]; row++) {
             var rowConstraints = new RowConstraints();
             rowConstraints.setVgrow(Priority.ALWAYS);
             gameboard.getRowConstraints().add(rowConstraints);
@@ -129,7 +122,7 @@ public class InGameController {
                 var hasWon = playground.checkIfWon();
 
                 if (hasWon) {
-                    var finishDto = new FinishDto(time.getText(), sceneData.difficulty());
+                    var finishDto = new FinishDto(time.getText(), playground.getDifficulty());
                     SceneManager.getInstance().setScene("win.fxml", new SceneData<>(finishDto));
                 }
             }
@@ -152,14 +145,11 @@ public class InGameController {
      * @param fieldText
      */
     private void placeFlag(Text fieldText, int x, int y) {
-        if (!playground.getField(x, y).getIsTagged() && Integer.parseInt(flags.getText()) > 0)
-        {
+        if (!playground.getField(x, y).getIsTagged() && Integer.parseInt(flags.getText()) > 0) {
             fieldText.setText("🚨");
             playground.tagField(x, y);
             flags.setText(Integer.parseInt(flags.getText()) - 1 + "");
-        }
-        else if (playground.getField(x, y).getIsTagged())
-        {
+        } else if (playground.getField(x, y).getIsTagged()) {
             fieldText.setText("");
             playground.tagField(x, y);
             flags.setText(Integer.parseInt(flags.getText()) + 1 + "");
