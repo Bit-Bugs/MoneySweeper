@@ -13,10 +13,13 @@ jobs:
         include:
           - os: ubuntu-latest
             gradle-command: ./gradlew
+            shell: bash
           - os: macos-latest
             gradle-command: ./gradlew
+            shell: bash
           - os: windows-latest
             gradle-command: gradlew.bat
+            shell: cmd
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -29,6 +32,7 @@ jobs:
 
       - name: Build with Gradle
         run: ${{ matrix.gradle-command }} jlink
+        shell: ${{ matrix.shell }}
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
