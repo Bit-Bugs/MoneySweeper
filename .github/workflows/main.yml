@@ -5,46 +5,47 @@ on:
     branches:
       - main
 
-macos-build:
-  name: Build for macOS
-  runs-on: macos-latest
-  steps:
-    - name: Checkout Code
-      uses: actions/checkout@v3
+jobs:
+  macos-build:
+    name: Build for macOS
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-    - name: Set up JDK
-      uses: actions/setup-java@v3
-      with:
-        java-version: '22'
-        distribution: 'temurin'
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '22'
+          distribution: 'temurin'
 
-    - name: Build macOS Runtime
-      run: ./gradlew jlink
+      - name: Build macOS Runtime
+        run: ./gradlew jlink
 
-    - name: Upload macOS Runtime
-      uses: actions/upload-artifact@v3
-      with:
-        name: macos-runtime
-        path: build/image
+      - name: Upload macOS Runtime
+        uses: actions/upload-artifact@v3
+        with:
+          name: macos-runtime
+          path: build/image
 
-windows-build:
-  name: Build for Windows
-  runs-on: windows-latest
-  steps:
-    - name: Checkout Code
-      uses: actions/checkout@v3
+  windows-build:
+    name: Build for Windows
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-    - name: Set up JDK
-      uses: actions/setup-java@v3
-      with:
-        java-version: '22'
-        distribution: 'temurin'
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '22'
+          distribution: 'temurin'
 
-    - name: Build Windows Runtime
-      run: gradlew jlink
+      - name: Build Windows Runtime
+        run: gradlew jlink
 
-    - name: Upload Windows Runtime
-      uses: actions/upload-artifact@v3
-      with:
-        name: windows-runtime
-        path: build/image
+      - name: Upload Windows Runtime
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-runtime
+          path: build/image
