@@ -14,16 +14,18 @@ public class WinController {
     @FXML
     private TextField username;
 
+    private FinishDto sceneData;
+
     @FXML
     private void handleBackToMenuButtonClick(ActionEvent event) {
         System.out.println(username.getText() + " " + time.getText());
-        ScoreboardDataHandling.save(username.getText(), time.getText(), Difficulty.CUSTOM);
+        ScoreboardDataHandling.save(username.getText(), time.getText(), sceneData.difficulty());
         SceneManager.getInstance().setScene("menu.fxml");
     }
 
     @FXML
     private void initialize() {
-        var sceneData = (FinishDto) SceneManager.getInstance().getSceneData().data();
+        sceneData = (FinishDto) SceneManager.getInstance().getSceneData().data();
 
         time.setText(sceneData.time());
     }

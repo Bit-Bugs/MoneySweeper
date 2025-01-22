@@ -35,7 +35,6 @@ public class MenuController {
 
     @FXML
     public void initialize() {
-        ScoreboardDataHandling.loadFromFile();
         difficultyEasy.setUserData(Difficulty.EASY);
         difficultyMid.setUserData(Difficulty.MID);
         difficultyHard.setUserData(Difficulty.HARD);
@@ -122,7 +121,6 @@ public class MenuController {
     private void loadScoreboard(Difficulty difficulty) {
         if (difficulty == Difficulty.EASY) {
             ScoreboardEntry[] entries = ScoreboardDataHandling.loadScoreboard(Difficulty.EASY);
-            scoreboardItems.clear();
             scoreboardItems.addAll(Arrays.asList(entries));
         } else if (difficulty == Difficulty.MID) {
             ScoreboardEntry[] entries = ScoreboardDataHandling.loadScoreboard(Difficulty.MID);
