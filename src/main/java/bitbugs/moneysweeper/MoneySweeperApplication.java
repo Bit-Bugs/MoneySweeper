@@ -1,5 +1,6 @@
 package bitbugs.moneysweeper;
 
+import bitbugs.moneysweeper.backend.ScoreboardDataHandling;
 import bitbugs.moneysweeper.gui.SceneManager;
 import javafx.application.Application;
 import javafx.scene.image.Image;
@@ -11,6 +12,7 @@ import java.awt.Taskbar;
 public class MoneySweeperApplication extends Application {
     @Override
     public void start(Stage stage) {
+        ScoreboardDataHandling.loadFromFile();
         var sceneManager = SceneManager.getInstance();
         sceneManager.setPrimaryStage(stage, "Money Swe3§€$eper");
         sceneManager.setScene("menu.fxml");

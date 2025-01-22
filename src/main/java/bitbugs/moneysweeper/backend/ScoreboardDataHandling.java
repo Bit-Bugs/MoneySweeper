@@ -4,6 +4,7 @@ import bitbugs.moneysweeper.gui.Difficulty;
 import bitbugs.moneysweeper.gui.dto.ScoreboardEntry;
 
 import java.io.*;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -11,7 +12,6 @@ import java.util.List;
 public class ScoreboardDataHandling {
 
     private static ArrayList<Player> scoreboard = new ArrayList<>();
-    private static ArrayList<Player> loadedData = new ArrayList<>();
     static String tempDir = System.getProperty("java.io.tmpdir");
     static File scoreboardFile = new File(tempDir, "Scoreboard.txt");
 
@@ -36,8 +36,15 @@ public class ScoreboardDataHandling {
         {
             if (isNameTaken(username))
             {
+                LocalTime t1 = LocalTime.parse(user.getTime(dif));
+                LocalTime t2 = LocalTime.parse(time);
+                String shorterTime = t1.isBefore(t2) ? user.getTime(dif) : time;
+
                 user.addScore(dif);
-                user.setTime(time, dif);
+                if(shorterTime.equals(time))
+                {
+                    user.setTime(time, dif);
+                }
             }else
             {
                 Player newUser = new Player(dif.toString(), 1, username, time);
@@ -45,7 +52,7 @@ public class ScoreboardDataHandling {
                 break;
             }
         }
-        if (scoreboard.isEmpty()) //Wenn das file zwar existiert, aber nix drinnen ist.
+        if (scoreboard.isEmpty()) //Wenn dieser win der erste ist.
         {
             Player newUser = new Player(dif.toString(), 1, username, time);
             scoreboard.add(newUser);
@@ -105,7 +112,7 @@ public class ScoreboardDataHandling {
                 {
                     List<String> data = List.of(line.split(","));
                     Player newEntry = new Player(data.get(0), Integer.parseInt(data.get(1)), Integer.parseInt(data.get(2)), Integer.parseInt(data.get(3)), data.get(4), data.get(5), data.get(6));
-                    loadedData.add(newEntry);
+                    scoreboard.add(newEntry);
                 }
                 line = reader.readLine();
             }
