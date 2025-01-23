@@ -32,7 +32,7 @@ public class SceneManager {
         this.primaryStage = stage;
     }
 
-    public void setScene(String fxmlFile){
+    public void setScene(String fxmlFile) {
         this.setScene(fxmlFile, null);
     }
 

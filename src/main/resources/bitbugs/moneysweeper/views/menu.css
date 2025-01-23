@@ -1,5 +1,5 @@
 .left-side {
-    -fx-background-image:url('holy-franklin.png');
+    -fx-background-image: url('holy-franklin.png');
     -fx-background-repeat: no-repeat;
     -fx-background-size: contain;
     -fx-background-position: bottom left;

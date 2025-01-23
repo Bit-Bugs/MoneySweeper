@@ -14,13 +14,10 @@ public class ScoreboardDataHandling {
     static String tempDir = System.getProperty("java.io.tmpdir");
     static File scoreboardFile = new File(tempDir, "Scoreboard.txt");
 
-    public static boolean isNameTaken(String name)
-    {
+    public static boolean isNameTaken(String name) {
         //geht alle User durch, und schaut nach, ob der Name des Users schon existiert.
-        for (Player user : scoreboard)
-        {
-            if (user.getName().equals(name))
-            {
+        for (Player user : scoreboard) {
+            if (user.getName().equals(name)) {
                 return true;
             }
         }
@@ -28,20 +25,15 @@ public class ScoreboardDataHandling {
     }
 
 
-    public static void save(String username, String time, Difficulty dif)
-    {
+    public static void save(String username, String time, Difficulty dif) {
         //Wenn man gewonnen hat, wird der Highscore entweder um 1 erhöht, oder der User neu angelegt.
-        for (Player user : scoreboard)
-        {
-            if (isNameTaken(username))
-            {
+        for (Player user : scoreboard) {
+            if (isNameTaken(username)) {
                 user.addScore(dif);
-                if(user.isShorterTime(time, dif))
-                {
+                if (user.isShorterTime(time, dif)) {
                     user.setTime(time, dif);
                 }
-            }else
-            {
+            } else {
                 Player newUser = new Player(dif.toString(), 1, username, time);
                 scoreboard.add(newUser);
                 break;
@@ -55,16 +47,13 @@ public class ScoreboardDataHandling {
         writeToFile();
     }
 
-    public static ScoreboardEntry[] loadScoreboard(Difficulty dif)
-    {
+    public static ScoreboardEntry[] loadScoreboard(Difficulty dif) {
         //macht alle Daten zu ScoreboardEntries, und steckt die dann in ein Array
         sortScoreboard(dif);
         ArrayList<ScoreboardEntry> tempScoreboardUsers = new ArrayList<>();
 
-        for (Player user : scoreboard)
-        {
-            if (user.getScore(dif) != 0)
-            {
+        for (Player user : scoreboard) {
+            if (user.getScore(dif) != 0) {
                 ScoreboardEntry entry = new ScoreboardEntry(user.getScore(dif), user.getName(), user.getTime(dif));
                 tempScoreboardUsers.add(entry);
             }
@@ -73,77 +62,63 @@ public class ScoreboardDataHandling {
         return tempScoreboardUsers.toArray(new ScoreboardEntry[0]);
     }
 
-    public static void writeToFile()
-    {
+    public static void writeToFile() {
         //schreibt alle Daten in das Scoreboard file im temp ordner des Users.
-        try(BufferedWriter writer = new BufferedWriter(new FileWriter(scoreboardFile)))
-        {
-            for(Player line : scoreboard)
-            {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(scoreboardFile))) {
+            for (Player line : scoreboard) {
                 writer.write(line.toString());
                 writer.newLine();
             }
 
             System.out.println("File saved to:" + scoreboardFile.getAbsolutePath());
-        }catch (IOException ex)
-        {
+        } catch (IOException ex) {
             ex.printStackTrace();
             System.out.println("Something went wrong while saving the data.");
         }
     }
 
 
-
-
-    public static void loadFromFile()
-    {
+    public static void loadFromFile() {
         //Laed die Daten aus dem File im Temp order des Users. Falls das File nicht existiert, passiert nichts.
-        try(BufferedReader reader = new BufferedReader(new FileReader(scoreboardFile)))
-        {
+        try (BufferedReader reader = new BufferedReader(new FileReader(scoreboardFile))) {
             String line = reader.readLine();
-            while(line != null)
-            {
-                if(!line.isBlank())
-                {
+            while (line != null) {
+                if (!line.isBlank()) {
                     List<String> data = List.of(line.split(","));
                     Player newEntry = new Player(data.get(0), Integer.parseInt(data.get(1)), Integer.parseInt(data.get(2)), Integer.parseInt(data.get(3)), data.get(4), data.get(5), data.get(6));
                     scoreboard.add(newEntry);
                 }
                 line = reader.readLine();
             }
-        }catch (FileNotFoundException ex)
-        {
-        }catch (IOException ex)
-        {
+        } catch (FileNotFoundException ex) {
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
-    private static void sortScoreboard(Difficulty dif)
-    {
+    private static void sortScoreboard(Difficulty dif) {
         //Hier wird das Scoreboard sortiert. Zu erst nach schnellster completion, dann overall completions, dann name (alphabetisch).
-        switch (dif)
-            {
-                case EASY:
-                    scoreboard.sort(Comparator.comparing(Player::getEasyTime)
-                            .thenComparing(Player::getEasyScore, Comparator.reverseOrder())
-                            .thenComparing(Player::getName)
-                    );
-                    break;
-                case MID:
-                    scoreboard.sort(Comparator.comparing(Player::getMidTime)
-                            .thenComparing(Player::getMidScore)
-                            .thenComparing(Player::getName)
-                    );
-                    break;
-                case HARD:
-                    scoreboard.sort(Comparator.comparing(Player::getHardTime)
-                            .thenComparing(Player::getHardScore)
-                            .thenComparing(Player::getName)
-                    );
-                    break;
-                default:
-                    break;
-            }
+        switch (dif) {
+            case EASY:
+                scoreboard.sort(Comparator.comparing(Player::getEasyTime)
+                        .thenComparing(Player::getEasyScore, Comparator.reverseOrder())
+                        .thenComparing(Player::getName)
+                );
+                break;
+            case MID:
+                scoreboard.sort(Comparator.comparing(Player::getMidTime)
+                        .thenComparing(Player::getMidScore)
+                        .thenComparing(Player::getName)
+                );
+                break;
+            case HARD:
+                scoreboard.sort(Comparator.comparing(Player::getHardTime)
+                        .thenComparing(Player::getHardScore)
+                        .thenComparing(Player::getName)
+                );
+                break;
+            default:
+                break;
+        }
     }
 }

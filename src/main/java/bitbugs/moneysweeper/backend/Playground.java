@@ -140,7 +140,7 @@ public class Playground {
         Random rnd = new Random();
         int x, y;
 
-        for (int i = 0; i < bombs;) {
+        for (int i = 0; i < bombs; ) {
             x = rnd.nextInt(difficultySize[0]);
             y = rnd.nextInt(difficultySize[1]);
 
@@ -254,7 +254,7 @@ public class Playground {
         return this.bombs;
     }
 
-    public void setBombs(int bombs){
+    public void setBombs(int bombs) {
         this.bombs = bombs;
     }
 }

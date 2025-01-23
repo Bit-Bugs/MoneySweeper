@@ -145,7 +145,7 @@ public class MenuController {
         });
     }
 
-    private void handlePlayButtonAvailability(){
+    private void handlePlayButtonAvailability() {
         var disabled = false;
 
         if (!bombs.getText().isEmpty() && !fieldWidth.getText().isEmpty() && !fieldHeight.getText().isEmpty()) {
@@ -156,7 +156,7 @@ public class MenuController {
             fieldWidth.setUserData(width);
             fieldHeight.setUserData(height);
 
-            if(newBombs > width * height || width < 2 || height < 2){
+            if (newBombs > width * height || width < 2 || height < 2) {
                 disabled = true;
             }
         } else {

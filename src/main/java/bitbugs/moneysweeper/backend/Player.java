@@ -4,10 +4,10 @@ import bitbugs.moneysweeper.gui.Difficulty;
 
 import java.time.LocalTime;
 
-public class Player{
+public class Player {
     private final String name;
-    private String timeEasy="00:00:00", timeMid="00:00:00", timeHard="00:00:00";
-    private int scoreEasy=0, scoreMid=0, scoreHard=0;
+    private String timeEasy = "00:00:00", timeMid = "00:00:00", timeHard = "00:00:00";
+    private int scoreEasy = 0, scoreMid = 0, scoreHard = 0;
 
     public int getScore(Difficulty dif) {
         //Liefert den Score der gewollten Difficulty zurueck.
@@ -19,18 +19,17 @@ public class Player{
         };
     }
 
-    public int getEasyScore()
-    {
+    public int getEasyScore() {
         //fuer das Sortieren des Scoreboards.
         return scoreEasy;
     }
-    public int getMidScore()
-    {
+
+    public int getMidScore() {
         //fuer das Sortieren des Scoreboards.
         return scoreMid;
     }
-    public int getHardScore()
-    {
+
+    public int getHardScore() {
         //fuer das Sortieren des Scoreboards.
         return scoreHard;
     }
@@ -41,7 +40,8 @@ public class Player{
             case EASY -> scoreEasy = score;
             case MID -> scoreMid = score;
             case HARD -> scoreHard = score;
-            default -> {}
+            default -> {
+            }
         }
     }
 
@@ -51,23 +51,23 @@ public class Player{
             case EASY -> scoreEasy += 1;
             case MID -> scoreMid += 1;
             case HARD -> scoreHard += 1;
-            default -> {}
+            default -> {
+            }
         }
     }
 
-    public void setTime(String time, Difficulty dif)
-    {
+    public void setTime(String time, Difficulty dif) {
         //Setzte die shortest completion time der angegeben Difficulty.
         switch (dif) {
             case EASY -> timeEasy = time;
             case MID -> timeMid = time;
             case HARD -> timeHard = time;
-            default -> {}
+            default -> {
+            }
         }
     }
 
-    public String getTime(Difficulty dif)
-    {
+    public String getTime(Difficulty dif) {
         //gibt die shortest completion time der angegeben Difficulty zurueck.
         return switch (dif) {
             case EASY -> timeEasy;
@@ -77,8 +77,7 @@ public class Player{
         };
     }
 
-    public boolean isShorterTime(String time, Difficulty dif)
-    {
+    public boolean isShorterTime(String time, Difficulty dif) {
         //Schaut, ob die angegebene completion time kuerzer, als die schon vorhandene ist.
         LocalTime t1 = LocalTime.parse(this.getTime(dif));
         LocalTime t2 = LocalTime.parse(time);
@@ -87,24 +86,22 @@ public class Player{
         return shorterTime.equals(time);
     }
 
-    public LocalTime getEasyTime()
-    {
+    public LocalTime getEasyTime() {
         //fuer das Sortieren des Scoreboards.
         return LocalTime.parse(timeEasy);
     }
-    public LocalTime getMidTime()
-    {
+
+    public LocalTime getMidTime() {
         //fuer das Sortieren des Scoreboards.
         return LocalTime.parse(timeMid);
     }
-    public LocalTime getHardTime()
-    {
+
+    public LocalTime getHardTime() {
         ///fuer das Sortieren des Scoreboards.
         return LocalTime.parse(timeHard);
     }
 
-    public String getName()
-    {
+    public String getName() {
         //Liefert den Namen des Users zurueck.
         return name;
     }
@@ -124,8 +121,7 @@ public class Player{
         setTime(time, difficulty);
     }
 
-    public Player(String name, int scoreE, int scoreM, int scoreH, String timeE, String timeM, String timeH)
-    {
+    public Player(String name, int scoreE, int scoreM, int scoreH, String timeE, String timeM, String timeH) {
         //Constructor, wenn ein User vom File geladen wird.
         this.name = name;
         this.scoreEasy = scoreE;

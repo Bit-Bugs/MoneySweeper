@@ -10,8 +10,7 @@ public class Field {
     private boolean turnedOver;
 
 
-    public Field(int x, int y)
-    {
+    public Field(int x, int y) {
         this.x = x;
         this.y = y;
         this.hasBomb = false;
@@ -20,8 +19,7 @@ public class Field {
         this.surroundingMines = 0;
     }
 
-    public Field(int x, int y, boolean checked, int surroundingMines)
-    {
+    public Field(int x, int y, boolean checked, int surroundingMines) {
         this.x = x;
         this.y = y;
         this.checked = checked;
@@ -34,13 +32,15 @@ public class Field {
     public boolean getIsTagged() {
         return isTagged;
     }
+
     public void setIsTagged(boolean isTagged) {
         this.isTagged = isTagged;
     }
 
-    public boolean getHasBomb(){
+    public boolean getHasBomb() {
         return hasBomb;
     }
+
     public void setHasBomb(boolean hasBomb) {
         this.hasBomb = hasBomb;
     }
@@ -48,6 +48,7 @@ public class Field {
     public int getSurroundingMines() {
         return surroundingMines;
     }
+
     public void setSurroundingMines(int surroundingMines) {
         this.surroundingMines = surroundingMines;
     }
@@ -55,6 +56,7 @@ public class Field {
     public boolean getTurnedOver() {
         return turnedOver;
     }
+
     public void setTurnedOver(boolean turnedOver) {
         this.turnedOver = turnedOver;
     }
