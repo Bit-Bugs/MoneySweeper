@@ -18,7 +18,7 @@ public class WinController {
 
     @FXML
     private void handleBackToMenuButtonClick(ActionEvent event) {
-        System.out.println(username.getText() + " " + time.getText());
+        //Wenn man gewonnen hat, wird man nach Name gefragt. Der name mit der completion time wird dann fuer die Verarbeitung weitergegeben.
         ScoreboardDataHandling.save(username.getText(), time.getText(), sceneData.difficulty());
         SceneManager.getInstance().setScene("menu.fxml");
     }

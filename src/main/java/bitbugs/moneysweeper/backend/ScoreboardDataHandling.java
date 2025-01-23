@@ -4,7 +4,6 @@ import bitbugs.moneysweeper.gui.Difficulty;
 import bitbugs.moneysweeper.gui.dto.ScoreboardEntry;
 
 import java.io.*;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -36,12 +35,8 @@ public class ScoreboardDataHandling {
         {
             if (isNameTaken(username))
             {
-                LocalTime t1 = LocalTime.parse(user.getTime(dif));
-                LocalTime t2 = LocalTime.parse(time);
-                String shorterTime = t1.isBefore(t2) ? user.getTime(dif) : time;
-
                 user.addScore(dif);
-                if(shorterTime.equals(time))
+                if(user.isShorterTime(time, dif))
                 {
                     user.setTime(time, dif);
                 }
@@ -126,17 +121,26 @@ public class ScoreboardDataHandling {
 
     private static void sortScoreboard(Difficulty dif)
     {
-        //Hier wird das Scoreboard sortiert, basierend darauf, welche Difficulty ausfewählt wurde.
+        //Hier wird das Scoreboard sortiert. Zu erst nach schnellster completion, dann overall completions, dann name (alphabetisch).
         switch (dif)
             {
                 case EASY:
-                    scoreboard.sort(Comparator.comparing(Player::getEasyScore));
+                    scoreboard.sort(Comparator.comparing(Player::getEasyTime)
+                            .thenComparing(Player::getEasyScore, Comparator.reverseOrder())
+                            .thenComparing(Player::getName)
+                    );
                     break;
                 case MID:
-                    scoreboard.sort(Comparator.comparing(Player::getMidScore));
+                    scoreboard.sort(Comparator.comparing(Player::getMidTime)
+                            .thenComparing(Player::getMidScore)
+                            .thenComparing(Player::getName)
+                    );
                     break;
                 case HARD:
-                    scoreboard.sort(Comparator.comparing(Player::getHardScore));
+                    scoreboard.sort(Comparator.comparing(Player::getHardTime)
+                            .thenComparing(Player::getHardScore)
+                            .thenComparing(Player::getName)
+                    );
                     break;
                 default:
                     break;
